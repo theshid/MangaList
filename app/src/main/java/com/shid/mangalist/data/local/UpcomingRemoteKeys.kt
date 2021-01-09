@@ -1,0 +1,12 @@
+package com.shid.mangalist.data.local
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "upcoming_anime_remote_keys")
+data class UpcomingRemoteKeys(
+    @PrimaryKey
+    val animeId: Long,
+    val prevKey: Int?,
+    val nextKey: Int?
+)
