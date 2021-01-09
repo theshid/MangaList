@@ -12,7 +12,7 @@ interface AnimeRemoteKeysDao {
     suspend fun insertAllAiringKeys(remoteKey: List<AiringRemoteKeys>)
 
     @Query("SELECT * FROM airing_anime_remote_keys WHERE animeId = :mangaId")
-    suspend fun remoteKeysByAiringAnimeId(mangaId: Long): AiringRemoteKeys?
+    suspend fun remoteKeysByAiringAnimeId(mangaId: Int?): AiringRemoteKeys?
 
     @Query("DELETE FROM airing_anime_remote_keys")
     suspend fun clearAiringAnimeRemoteKeys()
@@ -22,7 +22,7 @@ interface AnimeRemoteKeysDao {
     suspend fun insertAllMoviesKeys(remoteKey: List<MovieRemoteKeys>)
 
     @Query("SELECT * FROM movie_anime_remote_keys WHERE animeId = :mangaId")
-    suspend fun remoteKeysByMovieId(mangaId: Long): MovieRemoteKeys?
+    suspend fun remoteKeysByMovieId(mangaId: Int?): MovieRemoteKeys?
 
     @Query("DELETE FROM movie_anime_remote_keys")
     suspend fun clearMoviesRemoteKeys()
@@ -32,7 +32,7 @@ interface AnimeRemoteKeysDao {
     suspend fun insertAllOvaRemoteKeys(remoteKey: List<OvaRemoteKeys>)
 
     @Query("SELECT * FROM ova_anime_remote_keys WHERE animeId = :mangaId")
-    suspend fun remoteKeysByOvaAnimeId(mangaId: Long): OvaRemoteKeys?
+    suspend fun remoteKeysByOvaAnimeId(mangaId: Int?): OvaRemoteKeys?
 
     @Query("DELETE FROM ova_anime_remote_keys")
     suspend fun clearOvaAnimeRemoteKeys()
@@ -42,7 +42,7 @@ interface AnimeRemoteKeysDao {
     suspend fun insertAllTvAnimesKeys(remoteKey: List<TvRemoteKeys>)
 
     @Query("SELECT * FROM tv_anime_remote_keys WHERE animeId = :mangaId")
-    suspend fun remoteKeysByTvAnimeId(mangaId: Long): TvRemoteKeys?
+    suspend fun remoteKeysByTvAnimeId(mangaId: Int?): TvRemoteKeys?
 
     @Query("DELETE FROM tv_anime_remote_keys")
     suspend fun clearTvAnimeRemoteKeys()
@@ -52,9 +52,9 @@ interface AnimeRemoteKeysDao {
     suspend fun insertAllUpcomingAnimesKeys(remoteKey: List<UpcomingRemoteKeys>)
 
     @Query("SELECT * FROM upcoming_anime_remote_keys WHERE animeId = :mangaId")
-    suspend fun remoteKeysByUpcomingAnimeId(mangaId: Long): UpcomingRemoteKeys?
+    suspend fun remoteKeysByUpcomingAnimeId(mangaId: Int?): UpcomingRemoteKeys?
 
     @Query("DELETE FROM upcoming_anime_remote_keys")
-    suspend fun clearRemoteKeys()
+    suspend fun clearUpcomingRemoteKeys()
 
 }

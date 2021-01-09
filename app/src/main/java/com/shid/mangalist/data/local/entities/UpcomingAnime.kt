@@ -11,6 +11,4 @@ import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
     val type: String? = "",
     val episodes: Int? = 0,
     val score: Double? = 0.0
-){
-
-}
+):AnimeType

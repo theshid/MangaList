@@ -10,7 +10,7 @@ interface AnimeDao {
 
     //Airing Anime
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAiringAnimes(movieResponse: List<AiringAnime>)
+    suspend fun insertAiringAnimes(animeResponse: List<AiringAnime>)
 
     @Query("select * from airing_anime")
     fun getAiringAnimes(): PagingSource<Int, AiringAnime>
@@ -20,7 +20,7 @@ interface AnimeDao {
 
     //Movie Anime
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMoviesAnime(movieResponse: List<MovieAnime>)
+    suspend fun insertMoviesAnime(animeResponse: List<MovieAnime>)
 
     @Query("select * from movie_anime")
     fun getMovies(): PagingSource<Int, MovieAnime>
@@ -30,7 +30,7 @@ interface AnimeDao {
 
     //Ova Anime
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOvaAnimes(movieResponse: List<OvaAnime>)
+    suspend fun insertOvaAnimes(animeResponse: List<OvaAnime>)
 
     @Query("select * from ova_anime")
     fun getOvaAnimes(): PagingSource<Int, OvaAnime>
@@ -41,7 +41,7 @@ interface AnimeDao {
 
     //Tv Animes
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTvAnimes(movieResponse: List<TvAnime>)
+    suspend fun insertTvAnimes(animeResponse: List<TvAnime>)
 
     @Query("select * from tv_anime")
     fun getTvAnimes(): PagingSource<Int, TvAnime>
@@ -51,7 +51,7 @@ interface AnimeDao {
 
     //Upcoming Animes
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovies(movieResponse: List<UpcomingAnime>)
+    suspend fun insertUpcomingAnimes(animeResponse: List<UpcomingAnime>)
 
     @Query("select * from upcoming_anime")
     fun getUpcomingAnimes(): PagingSource<Int, UpcomingAnime>

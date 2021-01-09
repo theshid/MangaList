@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "ova_anime_remote_keys")
 data class OvaRemoteKeys(
     @PrimaryKey
-    val animeId: Long,
+    val animeId: Int?,
     val prevKey: Int?,
     val nextKey: Int?
-)
+):RemoteKeysType

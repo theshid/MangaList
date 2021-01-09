@@ -10,4 +10,4 @@ data class AiringAnime(
     val type: String? = "",
     val episodes: Int? = 0,
     val score: Double? = 0.0
-)
+):AnimeType
