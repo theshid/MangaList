@@ -9,4 +9,4 @@ data class TvRemoteKeys(
     val animeId: Int?,
     val prevKey: Int?,
     val nextKey: Int?
-) :RemoteKeysType
+)
