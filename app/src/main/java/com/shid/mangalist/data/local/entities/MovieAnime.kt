@@ -1,4 +1,4 @@
-package com.shid.mangalist.data.local
+package com.shid.mangalist.data.local.entities
 
 import androidx.room.Entity
 

@@ -1,9 +1,9 @@
-package com.shid.mangalist.data.local
+package com.shid.mangalist.data.local.entities
 
 import androidx.room.Entity
 
-@Entity(tableName = "tv_anime")
-data class TvAnime(
+@Entity(tableName = "ova_anime")
+data class OvaAnime(
     val id: Int? = 0,
     val title: String? = "",
     val imageUrl: String? = "",
