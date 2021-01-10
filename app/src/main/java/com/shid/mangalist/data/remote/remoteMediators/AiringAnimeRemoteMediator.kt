@@ -8,7 +8,6 @@ import androidx.room.withTransaction
 import com.shid.mangalist.data.local.db.AnimeDatabase
 import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.local.entities.AiringRemoteKeys
-import com.shid.mangalist.data.local.entities.RemoteKeysType
 import com.shid.mangalist.data.remote.network.ApiServices
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.utils.Constants
@@ -19,10 +18,10 @@ import javax.inject.Inject
 class AiringAnimeRemoteMediator @Inject constructor(
     private val services: ApiServices,
     private val database: AnimeDatabase
-): RemoteMediator<Int, AnimeListResponse>() {
+): RemoteMediator<Int, AiringAnime>(){
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, AnimeListResponse>
+        state: PagingState<Int, AiringAnime>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -92,20 +91,20 @@ class AiringAnimeRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeListResponse>): AiringRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AiringAnime>): AiringRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
             database.animeRemoteKeysDao().remoteKeysByAiringAnimeId(repo.id)
 
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeListResponse>): AiringRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AiringAnime>): AiringRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { anime ->
             database.animeRemoteKeysDao().remoteKeysByAiringAnimeId(anime.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeListResponse>): AiringRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AiringAnime>): AiringRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
                 database.animeRemoteKeysDao().remoteKeysByAiringAnimeId(id)

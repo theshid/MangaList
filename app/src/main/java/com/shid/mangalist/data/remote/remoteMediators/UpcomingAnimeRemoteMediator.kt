@@ -20,10 +20,10 @@ import javax.inject.Inject
 class UpcomingAnimeRemoteMediator @Inject constructor(
     private val services: ApiServices,
     private val database: AnimeDatabase
-) : RemoteMediator<Int, AnimeListResponse>() {
+) : RemoteMediator<Int, UpcomingAnime>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, AnimeListResponse>
+        state: PagingState<Int, UpcomingAnime>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -93,20 +93,20 @@ class UpcomingAnimeRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeListResponse>): UpcomingRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, UpcomingAnime>): UpcomingRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
             database.animeRemoteKeysDao().remoteKeysByUpcomingAnimeId(repo.id)
 
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeListResponse>): UpcomingRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, UpcomingAnime>): UpcomingRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { anime ->
             database.animeRemoteKeysDao().remoteKeysByUpcomingAnimeId(anime.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeListResponse>): UpcomingRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, UpcomingAnime>): UpcomingRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
                 database.animeRemoteKeysDao().remoteKeysByUpcomingAnimeId(id)

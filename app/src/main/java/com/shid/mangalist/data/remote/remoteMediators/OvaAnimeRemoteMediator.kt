@@ -18,10 +18,10 @@ import javax.inject.Inject
 class OvaAnimeRemoteMediator @Inject constructor(
     private val services: ApiServices,
     private val database: AnimeDatabase
-) : RemoteMediator<Int, AnimeListResponse>() {
+) : RemoteMediator<Int, OvaAnime>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, AnimeListResponse>
+        state: PagingState<Int, OvaAnime>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -91,20 +91,20 @@ class OvaAnimeRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeListResponse>): OvaRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, OvaAnime>): OvaRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
             database.animeRemoteKeysDao().remoteKeysByOvaAnimeId(repo.id)
 
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeListResponse>): OvaRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, OvaAnime>): OvaRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { anime ->
             database.animeRemoteKeysDao().remoteKeysByOvaAnimeId(anime.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeListResponse>): OvaRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, OvaAnime>): OvaRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
                 database.animeRemoteKeysDao().remoteKeysByOvaAnimeId(id)

@@ -18,10 +18,10 @@ import javax.inject.Inject
 class TvAnimeRemoteMediator @Inject constructor(
     private val services: ApiServices,
     private val database: AnimeDatabase
-) : RemoteMediator<Int, AnimeListResponse>() {
+) : RemoteMediator<Int, TvAnime>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, AnimeListResponse>
+        state: PagingState<Int, TvAnime>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -91,20 +91,20 @@ class TvAnimeRemoteMediator @Inject constructor(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeListResponse>): TvRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, TvAnime>): TvRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { repo ->
             database.animeRemoteKeysDao().remoteKeysByTvAnimeId(repo.id)
 
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeListResponse>): TvRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, TvAnime>): TvRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { anime ->
             database.animeRemoteKeysDao().remoteKeysByTvAnimeId(anime.id)
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeListResponse>): TvRemoteKeys? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, TvAnime>): TvRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
                 database.animeRemoteKeysDao().remoteKeysByTvAnimeId(id)
