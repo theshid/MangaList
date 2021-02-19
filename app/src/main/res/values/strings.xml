@@ -3,4 +3,12 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="more">More</string>
+    <string name="top_airing">Top Airing</string>
+    <string name="score">Score</string>
+    <string name="poster">Poster</string>
+    <string name="top_upcoming">Upcoming</string>
+    <string name="tv">TV</string>
+    <string name="movie">Movie</string>
+    <string name="ova">OVA</string>
 </resources>

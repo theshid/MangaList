@@ -26,6 +26,12 @@ object NetworkModule {
         return Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
     }
 
+    val okHttpClient =  OkHttpClient.Builder()
+    .addInterceptor( HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+    .connectTimeout(120, TimeUnit.SECONDS)
+    .readTimeout(120, TimeUnit.SECONDS)
+    .build();
+
     @Provides
     @Singleton
     fun provideOkHttpClient() =  OkHttpClient.Builder()

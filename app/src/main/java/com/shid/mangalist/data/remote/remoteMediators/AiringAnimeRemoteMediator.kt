@@ -52,7 +52,7 @@ class AiringAnimeRemoteMediator @Inject constructor(
         }
 
         try {
-            val animeResponse = services.getTopAnime(Constants.AIRING_ANIME,page)
+            val animeResponse = services.getTop(Constants.AIRING_ANIME)
 
             //val data = movieResponse.mapDataToPopularMovies()
 
