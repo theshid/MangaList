@@ -9,7 +9,49 @@
         android:id="@+id/navigation_home"
         android:name="com.shid.mangalist.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_moreFragment"
+            app:destination="@id/moreFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.shid.mangalist.ui.more.MoreFragment"
+        android:label="@string/more"
+        tools:layout="@layout/more_fragment2" >
+        <argument
+            android:name="type"
+            app:argType="com.shid.mangalist.utils.enum.More" />
+        <action
+            android:id="@+id/action_moreFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailAnimeFragment"
+        android:name="com.shid.mangalist.ui.detail.DetailFragment"
+        android:label="@string/detail"
+        tools:layout="@layout/detail_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"

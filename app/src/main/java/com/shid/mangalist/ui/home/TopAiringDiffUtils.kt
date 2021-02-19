@@ -1,10 +1,7 @@
 package com.shid.mangalist.ui.home
 
 import androidx.recyclerview.widget.DiffUtil
-import com.shid.mangalist.data.local.entities.AiringAnime
-import com.shid.mangalist.data.local.entities.MovieAnime
-import com.shid.mangalist.data.local.entities.TvAnime
-import com.shid.mangalist.data.local.entities.UpcomingAnime
+import com.shid.mangalist.data.local.entities.*
 
 object TopAiringDiffUtils : DiffUtil.ItemCallback<AiringAnime>() {
 
@@ -67,6 +64,22 @@ object TopMovieDiffUtils : DiffUtil.ItemCallback<MovieAnime>() {
     override fun areContentsTheSame(
         oldItem: MovieAnime,
         newItem: MovieAnime
+    ): Boolean = oldItem.id == newItem.id
+
+}
+
+object TopOvaDiffUtils : DiffUtil.ItemCallback<OvaAnime>() {
+
+
+    override fun areItemsTheSame(
+        oldItem: OvaAnime,
+        newItem: OvaAnime
+    ): Boolean = oldItem == newItem
+
+
+    override fun areContentsTheSame(
+        oldItem: OvaAnime,
+        newItem: OvaAnime
     ): Boolean = oldItem.id == newItem.id
 
 }

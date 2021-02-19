@@ -52,7 +52,7 @@ class OvaAnimeRemoteMediator @Inject constructor(
         }
 
         try {
-            val animeResponse = services.getTopAnime(Constants.OVA_ANIME, page)
+            val animeResponse = services.getTop(Constants.OVA_ANIME)
 
             //val data = movieResponse.mapDataToPopularMovies()
 

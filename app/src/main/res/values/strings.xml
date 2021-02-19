@@ -11,4 +11,5 @@
     <string name="tv">TV</string>
     <string name="movie">Movie</string>
     <string name="ova">OVA</string>
+    <string name="detail">Detail</string>
 </resources>

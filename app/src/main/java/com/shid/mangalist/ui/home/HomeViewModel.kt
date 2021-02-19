@@ -7,10 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.shid.mangalist.data.local.entities.AiringAnime
-import com.shid.mangalist.data.local.entities.MovieAnime
-import com.shid.mangalist.data.local.entities.TvAnime
-import com.shid.mangalist.data.local.entities.UpcomingAnime
+import com.shid.mangalist.data.local.entities.*
 import com.shid.mangalist.data.repository.IAnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -56,6 +53,15 @@ class HomeViewModel @ExperimentalPagingApi
     suspend fun getTopMovieAnimes(): Flow<PagingData<MovieAnime>> {
         return repository
             .getMovieAnime()
+            .cachedIn(viewModelScope)
+            .flowOn(Dispatchers.IO)
+    }
+
+    @ExperimentalPagingApi
+
+    suspend fun getTopOvaAnimes(): Flow<PagingData<OvaAnime>> {
+        return repository
+            .getOvaAnime()
             .cachedIn(viewModelScope)
             .flowOn(Dispatchers.IO)
     }
