@@ -19,12 +19,12 @@ class RemoteDataSource @Inject constructor(private val services: ApiServices) {
         }
     }
 
-    /*suspend fun getTopAnime(type: String, callback: GetAnimeCallback) {
+    suspend fun getTopAnime(type: String, callback: GetAnimeCallback) {
         withContext(Dispatchers.IO) {
-            val animes = services.getTopAnime(type).top
+            val animes = services.getTop(type).top
             callback.onAnimeReceived(animes)
         }
-    }*/
+    }
 
     suspend fun getDetailAnime(id: Int, callback: GetDetailCallback) {
         withContext(Dispatchers.IO) {

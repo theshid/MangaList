@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.shid.mangalist.data.local.db.AnimeDatabase
 import com.shid.mangalist.data.local.entities.*
+import com.shid.mangalist.data.remote.AnimePagingSource
 import com.shid.mangalist.data.remote.remoteMediators.*
 import com.shid.mangalist.data.remote.response.detail.CharactersListResponse
 import com.shid.mangalist.data.remote.response.detail.DetailAnimeResponse
@@ -89,5 +90,7 @@ class IAnimeRepository @Inject constructor(
             pagingSourceFactory = { database.animeDao().getUpcomingAnimes() }
         ).flow
     }
+
+
 
 }

@@ -1,10 +1,13 @@
 package com.shid.mangalist.ui.more
 
 import android.app.Activity
+import android.graphics.Insets
+import android.os.Build
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +16,8 @@ import com.shid.mangalist.R
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.home.MoreDiffUtils
 
- class MoreAdapter constructor(var activity2: Activity) :
+
+class MoreAdapter constructor(var activity2: Activity) :
     PagingDataAdapter<AnimeListResponse, MoreAdapter.MoreViewHolder>(MoreDiffUtils) {
      companion object{
          lateinit var activity:Activity
@@ -46,19 +50,28 @@ import com.shid.mangalist.ui.home.MoreDiffUtils
 
 
         init {
-            var displayMetrics = DisplayMetrics()
-            activity.windowManager.getDefaultDisplay().getMetrics(displayMetrics)
-            var width = displayMetrics.widthPixels
             itemView.layoutParams = RecyclerView.LayoutParams(
-                width * 0.85f.toInt(),
+                getScreenWidth(activity) * 0.85f.toInt(),
                 RecyclerView.LayoutParams.WRAP_CONTENT
             )
         }
 
 
         fun bindTo(anime: AnimeListResponse) {
-
             image.load(anime.imageUrl)
         }
+
+         fun getScreenWidth(activity: Activity):Int{
+             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                 val windowMetrics = activity.windowManager.currentWindowMetrics
+                 val insets: Insets = windowMetrics.windowInsets
+                     .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+                 windowMetrics.bounds.width() - insets.left - insets.right
+             } else {
+                 val displayMetrics = DisplayMetrics()
+                 activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+                 displayMetrics.widthPixels
+             }
+         }
     }
 }
