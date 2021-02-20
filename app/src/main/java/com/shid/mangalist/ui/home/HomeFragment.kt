@@ -40,6 +40,8 @@ class HomeFragment : Fragment() {
     private lateinit var txt_moreMovie: TextView
     private lateinit var txt_moreOva: TextView
 
+
+
     @ExperimentalPagingApi
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,10 @@ class HomeFragment : Fragment() {
         clickListeners()
 
         return root
+    }
+
+    companion object{
+         lateinit var typeAnime:String
     }
 
     private fun clickListeners() {
@@ -79,6 +85,7 @@ class HomeFragment : Fragment() {
 
     private fun showMore(type: More) {
         findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToMoreFragment(type))
+        typeAnime = type.type
     }
 
     private fun configureViews(view: View) {

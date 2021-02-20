@@ -27,13 +27,17 @@ class MoreAdapter constructor(var activity2: Activity) :
          activity = activity2
      }
 
-
+    fun getAnimeItem(position: Int):AnimeListResponse{
+        return getItem(position)!!
+    }
 
 
     override fun onBindViewHolder(holder: MoreViewHolder, position: Int) {
         getItem(position)?.let { holder.bindTo(it) }
 
     }
+
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

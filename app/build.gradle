@@ -95,6 +95,8 @@ dependencies {
 
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 
 

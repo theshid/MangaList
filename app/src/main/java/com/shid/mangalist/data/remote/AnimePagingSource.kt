@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import com.shid.mangalist.data.remote.network.ApiServices
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.data.remote.response.top.TopAnimeResponse
+import com.shid.mangalist.ui.home.HomeFragment
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -18,7 +19,7 @@ class AnimePagingSource @Inject constructor(val backend: ApiServices
             // Start refresh at page 1 if undefined.
 
             val nextPageNumber = params.key ?: 1
-            val response = backend.getTopAnime(type, nextPageNumber)
+            val response = backend.getTopAnime(HomeFragment.typeAnime, nextPageNumber)
             return LoadResult.Page(
                 data = response.top,
                 prevKey = null, // Only paging forward.
