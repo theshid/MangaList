@@ -7,8 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.shid.mangalist.R
+import com.shid.mangalist.utils.custom.BaseFragment
 
-class MoreFragment : Fragment() {
+class MoreFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = MoreFragment()

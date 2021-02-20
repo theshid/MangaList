@@ -57,23 +57,23 @@ class HomeFragment : Fragment() {
 
     private fun clickListeners() {
         txt_moreAiring.setOnClickListener(View.OnClickListener {
-
+            showMore(More.AIRING)
         })
 
         txt_moreUpcoming.setOnClickListener(View.OnClickListener {
-
+            showMore(More.UPCOMING)
         })
 
         txt_moreTv.setOnClickListener(View.OnClickListener {
-
+            showMore(More.TV)
         })
 
         txt_moreMovie.setOnClickListener(View.OnClickListener {
-
+            showMore(More.MOVIE)
         })
 
         txt_moreOva.setOnClickListener(View.OnClickListener {
-
+            showMore(More.OVA)
         })
     }
 
