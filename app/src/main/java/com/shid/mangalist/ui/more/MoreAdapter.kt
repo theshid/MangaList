@@ -13,12 +13,14 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.shid.mangalist.R
+import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.home.MoreDiffUtils
+import com.shid.mangalist.ui.home.TopAiringDiffUtils
 
 
 class MoreAdapter constructor(var activity2: Activity) :
-    PagingDataAdapter<AnimeListResponse, MoreAdapter.MoreViewHolder>(MoreDiffUtils) {
+    PagingDataAdapter<AiringAnime, MoreAdapter.MoreViewHolder>(TopAiringDiffUtils) {
      companion object{
          lateinit var activity:Activity
      }
@@ -27,7 +29,7 @@ class MoreAdapter constructor(var activity2: Activity) :
          activity = activity2
      }
 
-    fun getAnimeItem(position: Int):AnimeListResponse{
+    fun getAnimeItem(position: Int):AiringAnime{
         return getItem(position)!!
     }
 
@@ -61,7 +63,7 @@ class MoreAdapter constructor(var activity2: Activity) :
         }
 
 
-        fun bindTo(anime: AnimeListResponse) {
+        fun bindTo(anime: AiringAnime) {
             image.load(anime.imageUrl)
         }
 

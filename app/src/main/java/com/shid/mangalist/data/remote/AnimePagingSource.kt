@@ -19,7 +19,7 @@ class AnimePagingSource @Inject constructor(val backend: ApiServices
             // Start refresh at page 1 if undefined.
 
             val nextPageNumber = params.key ?: 1
-            val response = backend.getTopAnime(HomeFragment.typeAnime, nextPageNumber)
+            val response = backend.getTop(HomeFragment.typeAnime)
             return LoadResult.Page(
                 data = response.top,
                 prevKey = null, // Only paging forward.
