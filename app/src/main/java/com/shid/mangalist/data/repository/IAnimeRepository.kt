@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.shid.mangalist.data.local.db.AnimeDatabase
 import com.shid.mangalist.data.local.entities.*
 import com.shid.mangalist.data.remote.AnimePagingSource
+import com.shid.mangalist.data.remote.RemoteDataSource
 import com.shid.mangalist.data.remote.remoteMediators.*
 import com.shid.mangalist.data.remote.response.detail.CharactersListResponse
 import com.shid.mangalist.data.remote.response.detail.DetailAnimeResponse
@@ -24,7 +25,8 @@ class IAnimeRepository @Inject constructor(
     private val movieAnimeRemoteMediator: MovieAnimeRemoteMediator,
     private val ovaAnimeRemoteMediator: OvaAnimeRemoteMediator,
     private val tvAnimeRemoteMediator: TvAnimeRemoteMediator,
-    private val upcomingAnimeRemoteMediator: UpcomingAnimeRemoteMediator
+    private val upcomingAnimeRemoteMediator: UpcomingAnimeRemoteMediator,
+    private val remoteDataSource: RemoteDataSource
 ):AnimeRepository {
     override suspend fun getAiringAnime(): Flow<PagingData<AiringAnime>> {
         return Pager(
@@ -90,6 +92,17 @@ class IAnimeRepository @Inject constructor(
             pagingSourceFactory = { database.animeDao().getUpcomingAnimes() }
         ).flow
     }
+
+    override suspend fun getTopAnime(type: String, page: Int): List<AnimeListResponse> {
+        lateinit var animeResult: List<AnimeListResponse>
+        remoteDataSource.getTopAnime(type,page, object : RemoteDataSource.GetAnimeCallback {
+            override fun onAnimeReceived(animeList: List<AnimeListResponse>) {
+                animeResult = animeList
+            }
+        })
+        return animeResult
+    }
+
 
 
 

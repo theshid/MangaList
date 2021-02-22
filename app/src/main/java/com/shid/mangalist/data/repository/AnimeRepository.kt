@@ -20,6 +20,8 @@ interface AnimeRepository {
 
     suspend fun getUpcomingAnime(): Flow<PagingData<UpcomingAnime>>
 
+    suspend fun getTopAnime(type:String,page:Int): List<AnimeListResponse>
+
 
 
 

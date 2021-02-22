@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
+import com.shid.mangalist.ui.home.*
 import com.shid.mangalist.utils.custom.BaseFragment
 import com.shid.mangalist.utils.custom.RecyclerItemClickListener
 import com.shid.mangalist.utils.custom.RecyclerSnapItemListener
@@ -21,12 +23,18 @@ import com.shid.mangalist.utils.custom.RecyclerViewPaginator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
 class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewItemClickListener {
     private val moreViewModel: MoreViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MoreAdapter
+    private lateinit var topAiringAdapter: TopAiringAdapter
+    private lateinit var topUpcomingAdapter: TopUpcomingAdapter
+    private lateinit var topTvAdapter: TopTvAdapter
+    private lateinit var topMovieAdapter: TopMovieAdapter
+    private lateinit var topOvaAdapter: TopOvaAdapter
+    var listResponse: ArrayList<AnimeListResponse> = ArrayList()
 
     companion object {
         fun newInstance() = MoreFragment()
@@ -40,52 +48,67 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.more_fragment2, container, false)
-        setView(root)
+        val typeFromActivity = MoreFragmentArgs.fromBundle(requireArguments()).type.type
+        setView(root,typeFromActivity)
         return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        //viewModel = ViewModelProvider(this).get(MoreViewModel::class.java)
 
-
-    }
 
     @ExperimentalPagingApi
-    private fun setView(root: View) {
+    private fun setView(root: View, type:String) {
         recyclerView = root.findViewById(R.id.rv_top)
-        adapter = MoreAdapter(activity)
-        recyclerView.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
-        recyclerView.adapter = adapter
+        topAiringAdapter = TopAiringAdapter()
 
-        recyclerView.addOnItemTouchListener(RecyclerItemClickListener(context, this))
+        topUpcomingAdapter = TopUpcomingAdapter()
+        topTvAdapter = TopTvAdapter()
+        topMovieAdapter = TopMovieAdapter()
+        topOvaAdapter = TopOvaAdapter()
+        val linearLayoutManager = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        recyclerView.layoutManager = linearLayoutManager
+        when (type) {
+            "airing" -> lifecycleScope.launch {
+                moreViewModel.getTopAiringAnimes().collectLatest {
+                    recyclerView.adapter = topAiringAdapter
+                    topAiringAdapter.submitData(it)
 
-        val snapHelper = com.shid.mangalist.utils.custom.PagerSnapHelper(RecyclerSnapItemListener { position ->
-            var anime: AiringAnime = adapter.getAnimeItem(position)
-            (activity as MainActivity).updateBackground(anime.imageUrl)
-        } )
+                }
 
-        snapHelper.attachToRecyclerView(recyclerView)
-        recyclerView.addOnScrollListener(object :RecyclerViewPaginator(recyclerView){
-            override fun isLastPage(): Boolean {
-                TODO("Not yet implemented")
+
             }
+            "upcoming" -> lifecycleScope.launch {
+                moreViewModel.getTopUpcomingAnimes().collectLatest {
+                    recyclerView.adapter = topUpcomingAdapter
+                    topUpcomingAdapter.submitData(it)
 
-            override fun loadMore(page: Long?) {
-               // moreViewModel.getData()
+                }
             }
-
-            override fun loadFirstData(page: Long?) {
-                //moreViewModel.getData()
+            "movie" -> lifecycleScope.launch {
+                moreViewModel.getTopMovieAnimes().collectLatest {
+                    recyclerView.adapter = topMovieAdapter
+                    topMovieAdapter.submitData(it)
+                }
             }
-
-        })
-
-        lifecycleScope.launch {
-            moreViewModel.getTopAiringAnimes().collectLatest {
-                adapter.submitData(it)
+            "tv" -> lifecycleScope.launch {
+                moreViewModel.getTopTvAnimes().collectLatest {
+                    recyclerView.adapter = topTvAdapter
+                    topTvAdapter.submitData(it)
+                }
+            }
+            "ova" -> lifecycleScope.launch {
+                moreViewModel.getTopOvaAnimes().collectLatest {
+                    recyclerView.adapter = topOvaAdapter
+                    topOvaAdapter.submitData(it)
+                }
+            }
+            else -> { // Note the block
+                return
             }
         }
+
 
     }
 

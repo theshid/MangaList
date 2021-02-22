@@ -10,12 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shid.mangalist.R
 import com.shid.mangalist.utils.enum.More
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -95,24 +97,59 @@ class HomeFragment : Fragment() {
         txt_moreMovie = view.findViewById(R.id.more_movie)
         txt_moreOva = view.findViewById(R.id.more_ova)
 
+        val linearLayoutManager = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+
+        val linearLayoutManager1 = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager1.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager1.reverseLayout = true
+        linearLayoutManager1.stackFromEnd = true
+
+        val linearLayoutManager2 = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager2.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager2.reverseLayout = true
+        linearLayoutManager2.stackFromEnd = true
+
+
+        val linearLayoutManager3 = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager3.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager3.reverseLayout = true
+        linearLayoutManager3.stackFromEnd = true
+
+
+        val linearLayoutManager4 = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager4.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager4.reverseLayout = true
+        linearLayoutManager4.stackFromEnd = true
+
+        
+
+
 
         airingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_airing)
+        airingRecyclerView.layoutManager = linearLayoutManager
         topAiringAdapter = TopAiringAdapter()
         airingRecyclerView.adapter = topAiringAdapter
 
         upcomingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_upcoming)
+        upcomingRecyclerView.layoutManager = linearLayoutManager1
         topUpcomingAdapter = TopUpcomingAdapter()
         upcomingRecyclerView.adapter = topUpcomingAdapter
 
         tvRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_tv)
+        tvRecyclerView.layoutManager = linearLayoutManager2
         topTvAdapter = TopTvAdapter()
         tvRecyclerView.adapter = topTvAdapter
 
         movieRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_movie)
+        movieRecyclerView.layoutManager = linearLayoutManager3
         topMovieAdapter = TopMovieAdapter()
         movieRecyclerView.adapter = topMovieAdapter
 
         ovaRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_ova)
+        ovaRecyclerView.layoutManager = linearLayoutManager4
         topOvaAdapter = TopOvaAdapter()
         ovaRecyclerView.adapter = topOvaAdapter
     }

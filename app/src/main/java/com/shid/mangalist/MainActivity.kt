@@ -13,13 +13,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var overlay_layout:BackgroundSwitcherView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        overlay_layout = findViewById(R.id.overlay_layout)
+
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -33,11 +33,5 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    fun updateBackground(url: String?) {
-        overlay_layout.updateCurrentBackground(url)
-    }
 
-    fun clearBackground() {
-        overlay_layout.clearImage()
-    }
 }
