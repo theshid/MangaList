@@ -20,7 +20,7 @@ import com.shid.mangalist.ui.home.TopAiringDiffUtils
 
 
 class MoreAdapter constructor(var activity2: Activity) :
-    PagingDataAdapter<AiringAnime, MoreAdapter.MoreViewHolder>(TopAiringDiffUtils) {
+    PagingDataAdapter<AnimeListResponse, MoreAdapter.MoreViewHolder>(MoreDiffUtils) {
      companion object{
          lateinit var activity:Activity
      }
@@ -29,7 +29,7 @@ class MoreAdapter constructor(var activity2: Activity) :
          activity = activity2
      }
 
-    fun getAnimeItem(position: Int):AiringAnime{
+    fun getAnimeItem(position: Int):AnimeListResponse{
         return getItem(position)!!
     }
 
@@ -55,15 +55,15 @@ class MoreAdapter constructor(var activity2: Activity) :
         private val image: ImageView = itemView.findViewById(R.id.image)
 
 
-        init {
+        /*init {
             itemView.layoutParams = RecyclerView.LayoutParams(
                 getScreenWidth(activity) * 0.85f.toInt(),
                 RecyclerView.LayoutParams.WRAP_CONTENT
             )
-        }
+        }*/
 
 
-        fun bindTo(anime: AiringAnime) {
+        fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
         }
 

@@ -5,21 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
-import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.home.*
 import com.shid.mangalist.utils.custom.BaseFragment
 import com.shid.mangalist.utils.custom.RecyclerItemClickListener
 import com.shid.mangalist.utils.custom.RecyclerSnapItemListener
-import com.shid.mangalist.utils.custom.RecyclerViewPaginator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,6 +30,7 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
     private lateinit var topTvAdapter: TopTvAdapter
     private lateinit var topMovieAdapter: TopMovieAdapter
     private lateinit var topOvaAdapter: TopOvaAdapter
+    private lateinit var adapter: MoreAdapter
     var listResponse: ArrayList<AnimeListResponse> = ArrayList()
 
     companion object {
@@ -49,16 +46,43 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
     ): View? {
         val root = inflater.inflate(R.layout.more_fragment2, container, false)
         val typeFromActivity = MoreFragmentArgs.fromBundle(requireArguments()).type.type
-        setView(root,typeFromActivity)
+        setView(root, typeFromActivity)
         return root
     }
 
 
 
     @ExperimentalPagingApi
-    private fun setView(root: View, type:String) {
+    private fun setView(root: View, type: String) {
         recyclerView = root.findViewById(R.id.rv_top)
-        topAiringAdapter = TopAiringAdapter()
+        adapter = MoreAdapter(activity)
+        val linearLayoutManager = ZoomRecyclerLayout(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        recyclerView.apply {
+            layoutManager = linearLayoutManager
+            setHasFixedSize(true)
+            adapter = adapter
+        }
+
+        var snapHelper= com.shid.mangalist.utils.custom.PagerSnapHelper(RecyclerSnapItemListener { position ->
+
+            var anime = adapter.getAnimeItem(position)
+            (activity as MainActivity).updateBackground(anime.imageUrl)
+        }
+
+        )
+
+        snapHelper.attachToRecyclerView(recyclerView)
+
+        lifecycleScope.launch {
+            moreViewModel.animes.collectLatest {
+                recyclerView.adapter = adapter
+                adapter.submitData(it)
+            }
+        }
+        /*topAiringAdapter = TopAiringAdapter()
 
         topUpcomingAdapter = TopUpcomingAdapter()
         topTvAdapter = TopTvAdapter()
@@ -107,7 +131,7 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
             else -> { // Note the block
                 return
             }
-        }
+        }*/
 
 
     }

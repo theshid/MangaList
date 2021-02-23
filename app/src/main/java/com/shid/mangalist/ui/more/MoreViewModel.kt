@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.shid.mangalist.data.local.entities.*
 import com.shid.mangalist.data.remote.AnimePagingSource
+import com.shid.mangalist.data.remote.network.ApiServices
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.data.repository.IAnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoreViewModel @ExperimentalPagingApi
-@Inject constructor(private val repository: IAnimeRepository) : ViewModel() {
+@Inject constructor(private val repository: IAnimeRepository, private val apiServices: ApiServices) : ViewModel() {
     @ExperimentalPagingApi
 
     suspend fun getTopAiringAnimes(): Flow<PagingData<AiringAnime>> {
@@ -27,6 +28,11 @@ class MoreViewModel @ExperimentalPagingApi
             .cachedIn(viewModelScope)
             .flowOn(Dispatchers.IO)
     }
+
+    val animes: Flow<PagingData<AnimeListResponse>> = Pager(PagingConfig(pageSize = 20)) {
+        AnimePagingSource(apiServices)
+    }.flow
+        .cachedIn(viewModelScope)
 
     @ExperimentalPagingApi
     suspend fun getData(type:String){
