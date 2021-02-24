@@ -2,6 +2,7 @@ package com.shid.mangalist.ui.more
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
@@ -12,6 +13,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
@@ -19,6 +21,7 @@ import com.shid.mangalist.ui.home.*
 import com.shid.mangalist.utils.custom.BaseFragment
 import com.shid.mangalist.utils.custom.RecyclerItemClickListener
 import com.shid.mangalist.utils.custom.RecyclerSnapItemListener
+import com.shid.mangalist.utils.enum.More
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,7 +39,6 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
     }
 
 
-
     @ExperimentalPagingApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +47,21 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
         val root = inflater.inflate(R.layout.more_fragment2, container, false)
         val typeFromActivity = MoreFragmentArgs.fromBundle(requireArguments()).type.type
         setView(root, typeFromActivity)
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.GONE
         return root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
 
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            goToHome()
         }
+        callback.isEnabled
 
     }
+
 
     @ExperimentalPagingApi
     private fun setView(root: View, type: String) {
@@ -70,7 +77,7 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
             adapter = adapter
         }
 
-        var snapHelper= com.shid.mangalist.utils.custom.PagerSnapHelper { position ->
+        var snapHelper = com.shid.mangalist.utils.custom.PagerSnapHelper { position ->
 
             var anime = adapter.getAnimeItem(position)
             (activity as MainActivity).updateBackground(anime.imageUrl)
@@ -89,8 +96,11 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
 
     }
 
-    fun goToHome(){
-
+    fun goToHome() {
+        findNavController().navigate(
+            MoreFragmentDirections.actionMoreFragmentToHomeFragment(
+            )
+        )
     }
 
     override fun onItemClick(parentView: View?, childView: View?, position: Int) {

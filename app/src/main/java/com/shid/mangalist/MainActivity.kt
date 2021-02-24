@@ -12,14 +12,14 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var overlayLayout:BackgroundSwitcherView
+    lateinit var overlayLayout: BackgroundSwitcherView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        overlayLayout =  findViewById(R.id.overlay_layout)
+        overlayLayout = findViewById(R.id.overlay_layout)
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -31,6 +31,22 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+
+    /**
+     * If using the default action bar this must be overridden.
+     * This will handle back actions initiated by the the back arrow
+     * at the start of the action bar.
+     */
+    override fun onSupportNavigateUp(): Boolean {
+        // Handle the back button event and return true to override
+        // the default behavior the same way as the OnBackPressedCallback.
+        // TODO(reason: handle custom back behavior here if desired.)
+
+        // If no custom behavior was handled perform the default action.
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     fun updateBackground(url: String?) {

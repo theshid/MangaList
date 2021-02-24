@@ -43,7 +43,7 @@
             app:popExitAnim="@anim/to_transparent" />
         <action
             android:id="@+id/action_moreFragment_to_homeFragment"
-            app:destination="@id/moreFragment"
+            app:destination="@id/navigation_home"
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
