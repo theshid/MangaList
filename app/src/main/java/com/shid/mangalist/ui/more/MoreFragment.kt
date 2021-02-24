@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
@@ -25,19 +28,14 @@ import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewItemClickListener {
     private val moreViewModel: MoreViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
-    private lateinit var topAiringAdapter: TopAiringAdapter
-    private lateinit var topUpcomingAdapter: TopUpcomingAdapter
-    private lateinit var topTvAdapter: TopTvAdapter
-    private lateinit var topMovieAdapter: TopMovieAdapter
-    private lateinit var topOvaAdapter: TopOvaAdapter
     private lateinit var adapter: MoreAdapter
-    var listResponse: ArrayList<AnimeListResponse> = ArrayList()
+
 
     companion object {
         fun newInstance() = MoreFragment()
     }
 
-    //private lateinit var viewModel: MoreViewModel
+
 
     @ExperimentalPagingApi
     override fun onCreateView(
@@ -50,7 +48,13 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
         return root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
 
+        }
+
+    }
 
     @ExperimentalPagingApi
     private fun setView(root: View, type: String) {
@@ -66,15 +70,14 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
             adapter = adapter
         }
 
-        var snapHelper= com.shid.mangalist.utils.custom.PagerSnapHelper(RecyclerSnapItemListener { position ->
+        var snapHelper= com.shid.mangalist.utils.custom.PagerSnapHelper { position ->
 
             var anime = adapter.getAnimeItem(position)
             (activity as MainActivity).updateBackground(anime.imageUrl)
         }
 
-        )
-
         snapHelper.attachToRecyclerView(recyclerView)
+
 
         lifecycleScope.launch {
             moreViewModel.animes.collectLatest {
@@ -82,57 +85,11 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
                 adapter.submitData(it)
             }
         }
-        /*topAiringAdapter = TopAiringAdapter()
-
-        topUpcomingAdapter = TopUpcomingAdapter()
-        topTvAdapter = TopTvAdapter()
-        topMovieAdapter = TopMovieAdapter()
-        topOvaAdapter = TopOvaAdapter()
-        val linearLayoutManager = ZoomRecyclerLayout(requireContext())
-        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager.reverseLayout = true
-        linearLayoutManager.stackFromEnd = true
-        recyclerView.layoutManager = linearLayoutManager
-        when (type) {
-            "airing" -> lifecycleScope.launch {
-                moreViewModel.getTopAiringAnimes().collectLatest {
-                    recyclerView.adapter = topAiringAdapter
-                    topAiringAdapter.submitData(it)
-
-                }
 
 
-            }
-            "upcoming" -> lifecycleScope.launch {
-                moreViewModel.getTopUpcomingAnimes().collectLatest {
-                    recyclerView.adapter = topUpcomingAdapter
-                    topUpcomingAdapter.submitData(it)
+    }
 
-                }
-            }
-            "movie" -> lifecycleScope.launch {
-                moreViewModel.getTopMovieAnimes().collectLatest {
-                    recyclerView.adapter = topMovieAdapter
-                    topMovieAdapter.submitData(it)
-                }
-            }
-            "tv" -> lifecycleScope.launch {
-                moreViewModel.getTopTvAnimes().collectLatest {
-                    recyclerView.adapter = topTvAdapter
-                    topTvAdapter.submitData(it)
-                }
-            }
-            "ova" -> lifecycleScope.launch {
-                moreViewModel.getTopOvaAnimes().collectLatest {
-                    recyclerView.adapter = topOvaAdapter
-                    topOvaAdapter.submitData(it)
-                }
-            }
-            else -> { // Note the block
-                return
-            }
-        }*/
-
+    fun goToHome(){
 
     }
 

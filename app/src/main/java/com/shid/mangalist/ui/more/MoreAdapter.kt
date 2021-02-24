@@ -12,6 +12,7 @@ import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
@@ -65,6 +66,7 @@ class MoreAdapter constructor(var activity2: Activity) :
 
         fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
+           // (activity as MainActivity).updateBackground(anime.imageUrl)
         }
 
          fun getScreenWidth(activity: Activity):Int{
