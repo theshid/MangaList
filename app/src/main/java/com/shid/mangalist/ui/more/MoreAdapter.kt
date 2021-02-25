@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -22,15 +23,15 @@ import com.shid.mangalist.ui.home.TopAiringDiffUtils
 
 class MoreAdapter constructor(var activity2: Activity) :
     PagingDataAdapter<AnimeListResponse, MoreAdapter.MoreViewHolder>(MoreDiffUtils) {
-     companion object{
-         lateinit var activity:Activity
-     }
+    companion object {
+        lateinit var activity: Activity
+    }
 
-     init {
-         activity = activity2
-     }
+    init {
+        activity = activity2
+    }
 
-    fun getAnimeItem(position: Int):AnimeListResponse{
+    fun getAnimeItem(position: Int): AnimeListResponse {
         return getItem(position)!!
     }
 
@@ -39,7 +40,6 @@ class MoreAdapter constructor(var activity2: Activity) :
         getItem(position)?.let { holder.bindTo(it) }
 
     }
-
 
 
     override fun onCreateViewHolder(
@@ -51,9 +51,11 @@ class MoreAdapter constructor(var activity2: Activity) :
         return MoreViewHolder(view)
     }
 
-     class MoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val image: ImageView = itemView.findViewById(R.id.image)
+        private val title: TextView = itemView.findViewById(R.id.txt_title)
+        private val score: TextView = itemView.findViewById(R.id.score_more)
 
 
         /*init {
@@ -66,20 +68,22 @@ class MoreAdapter constructor(var activity2: Activity) :
 
         fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
-           // (activity as MainActivity).updateBackground(anime.imageUrl)
+            title.text = anime.title
+            score.text = anime.score.toString()
+            // (activity as MainActivity).updateBackground(anime.imageUrl)
         }
 
-         fun getScreenWidth(activity: Activity):Int{
-             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                 val windowMetrics = activity.windowManager.currentWindowMetrics
-                 val insets: Insets = windowMetrics.windowInsets
-                     .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
-                 windowMetrics.bounds.width() - insets.left - insets.right
-             } else {
-                 val displayMetrics = DisplayMetrics()
-                 activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
-                 displayMetrics.widthPixels
-             }
-         }
+        fun getScreenWidth(activity: Activity): Int {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val windowMetrics = activity.windowManager.currentWindowMetrics
+                val insets: Insets = windowMetrics.windowInsets
+                    .getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+                windowMetrics.bounds.width() - insets.left - insets.right
+            } else {
+                val displayMetrics = DisplayMetrics()
+                activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+                displayMetrics.widthPixels
+            }
+        }
     }
 }

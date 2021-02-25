@@ -12,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.utils.enum.More
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,6 +93,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureViews(view: View) {
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.VISIBLE
+        (activity as MainActivity).clearBackground()
         txt_moreAiring = view.findViewById(R.id.more_airing)
         txt_moreUpcoming = view.findViewById(R.id.more_upcoming)
         txt_moreTv = view.findViewById(R.id.more_tv)
