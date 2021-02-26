@@ -1,72 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150dp"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.skydoves.transformationlayout.TransformationLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="150dp"
+    app:transformation_duration="550"
+    android:id="@+id/transformationLayout"
+    android:layout_height="wrap_content"
     android:layout_marginEnd="10dp"
-    android:orientation="vertical"
-    app:cardCornerRadius="40dp"
-    app:cardElevation="20dp"
-    app:cardMaxElevation="20dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
+    android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        app:cardCornerRadius="10dp">
+        android:layout_height="match_parent"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="20dp"
+        app:cardMaxElevation="20dp">
 
-        <ImageView
-            android:id="@+id/poster_image"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/poster"
-            android:scaleType="centerCrop"
-            tools:src="@color/purple_500" />
+            android:orientation="vertical"
+            android:padding="15dp">
 
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/poster_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/poster"
+                    android:scaleType="centerCrop"
+                    tools:src="@color/purple_500" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/arkhip_font"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                tools:text="@string/app_name" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:fontFamily="@font/arkhip_font"
+                    android:text="@string/score"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_score"
+                    android:fontFamily="@font/arkhip_font"
+                    android:paddingHorizontal="8dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    tools:text="8.7" />
+
+            </LinearLayout>
+
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:fontFamily="@font/arkhip_font"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        tools:text="@string/app_name" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/arkhip_font"
-            android:text="@string/score"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/score"
-            android:fontFamily="@font/arkhip_font"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_score"
-            android:paddingHorizontal="8dp"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            tools:text="8.7" />
-
-    </LinearLayout>
-
-</LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</com.skydoves.transformationlayout.TransformationLayout>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/root_detail"
     tools:context=".ui.detail.DetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +14,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="290dp"
+            android:id="@+id/transformation_image"
             android:contentDescription="@string/backdrop_image"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"

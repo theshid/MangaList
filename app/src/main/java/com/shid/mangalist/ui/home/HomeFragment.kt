@@ -15,14 +15,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
+import com.shid.mangalist.data.local.entities.AiringAnime
+import com.shid.mangalist.ui.detail.DetailFragment
 import com.shid.mangalist.utils.enum.More
+import com.skydoves.transformationlayout.TransformationLayout
+import com.skydoves.transformationlayout.addTransformation
+import com.skydoves.transformationlayout.onTransformationStartContainer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -45,6 +50,10 @@ class HomeFragment : Fragment() {
     private lateinit var txt_moreOva: TextView
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        onTransformationStartContainer()
+    }
 
     @ExperimentalPagingApi
     override fun onCreateView(
@@ -136,7 +145,7 @@ class HomeFragment : Fragment() {
 
         airingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_airing)
         airingRecyclerView.layoutManager = linearLayoutManager
-        topAiringAdapter = TopAiringAdapter()
+        topAiringAdapter = TopAiringAdapter(this)
         airingRecyclerView.adapter = topAiringAdapter
 
         upcomingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_upcoming)
@@ -194,5 +203,21 @@ class HomeFragment : Fragment() {
         }
 
 
+    }
+
+    override fun onItemClick(airingAnime: AiringAnime, itemView: TransformationLayout) {
+        val fragment = DetailFragment()
+        // [Step2]: getBundle from the TransformationLayout.
+        val bundle = itemView.getBundle(DetailFragment.paramsKey)
+        bundle.putParcelable(DetailFragment.posterKey, airingAnime)
+        fragment.arguments = bundle
+
+        parentFragmentManager
+            .beginTransaction()
+            // [Step3]: addTransformation using the TransformationLayout.
+            .addTransformation(itemView)
+            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
+            .addToBackStack(DetailFragment.TAG)
+            .commit()
     }
 }
