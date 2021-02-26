@@ -13,7 +13,9 @@ import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.AiringAnime
 import com.skydoves.transformationlayout.TransformationLayout
 import com.skydoves.transformationlayout.onTransformationEndContainer
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
  lateinit var rootView:ScrollView
  lateinit var trans_imageView: ImageView
