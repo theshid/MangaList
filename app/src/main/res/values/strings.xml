@@ -12,4 +12,8 @@
     <string name="movie">Movie</string>
     <string name="ova">OVA</string>
     <string name="detail">Detail</string>
+    <string name="backdrop_image">badrop image</string>
+    <string name="text_read_more">Read More</string>
+    <string name="title_cast">Characters</string>
+    <string name="genres">Genre</string>
 </resources>

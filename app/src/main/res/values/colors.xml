@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="search_overlay">#1A000000</color>
     <color name="green">#18801a</color>
+    <color name="detail">#292631</color>
+
+    <color name="detail_list_item_view">#cccccc</color>
+    <color name="detail_list_item_text">#111</color>
 </resources>

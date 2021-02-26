@@ -58,6 +58,7 @@ class HomeFragment : Fragment() {
         fetchTopAnimes()
         clickListeners()
 
+
         return root
     }
 
