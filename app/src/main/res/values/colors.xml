@@ -13,4 +13,6 @@
 
     <color name="detail_list_item_view">#cccccc</color>
     <color name="detail_list_item_text">#111</color>
+    <color name="gold">#FFD700</color>
+    <color name="text_fragment_detail">#7bc9c2</color>
 </resources>

@@ -2,19 +2,20 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root_detail"
     tools:context=".ui.detail.DetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
         <ImageView
+            android:id="@+id/transformation_image"
             android:layout_width="match_parent"
             android:layout_height="290dp"
-            android:id="@+id/transformation_image"
             android:contentDescription="@string/backdrop_image"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,17 +68,17 @@
 
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/movie_title"
+                    android:id="@+id/anime_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:fontFamily="@font/arkhip_font"
                     android:maxLines="1"
-                    android:text="Anime Title"
                     android:paddingTop="@dimen/margin_large"
                     android:paddingEnd="@dimen/padding"
                     android:paddingRight="@dimen/padding"
                     android:paddingBottom="@dimen/padding"
+                    android:text="Anime Title"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_x_medium_large"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -91,19 +92,45 @@
                     android:background="@color/detail_list_item_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movie_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/anime_title" />
 
                 <TextView
+                    android:id="@+id/video_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/genre_title"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="@string/genres"
+                    android:fontFamily="@font/arkhip_font"
+                    android:text="@string/video"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line_below_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/video_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@+id/video_title" />
+
+                <TextView
+                    android:id="@+id/genre_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/arkhip_font"
+                    android:text="@string/genres"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/video_list" />
 
 
                 <HorizontalScrollView
@@ -134,10 +161,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin"
                     android:lineSpacingExtra="5dp"
-                    android:text="Summary or Synopsis"
                     android:paddingTop="@dimen/margin"
                     android:paddingRight="@dimen/margin_xlarge"
                     android:paddingBottom="@dimen/margin_large"
+                    android:text="Summary or Synopsis"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_small_medium"
                     app:layout_constraintTop_toBottomOf="@+id/hori_scroll" />
@@ -174,9 +201,8 @@
                     android:paddingBottom="@dimen/padding"
                     android:text="@string/text_read_more"
                     android:textAllCaps="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_fragment_detail"
                     android:textSize="@dimen/font_small"
-                    android:visibility="invisible"
                     app:layout_constraintTop_toBottomOf="@+id/txt_runtime" />
 
 

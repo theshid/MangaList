@@ -210,6 +210,7 @@ class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
         // [Step2]: getBundle from the TransformationLayout.
         val bundle = itemView.getBundle(DetailFragment.paramsKey)
         bundle.putParcelable(DetailFragment.posterKey, airingAnime)
+        airingAnime.id?.let { bundle.putInt("key", it) }
         fragment.arguments = bundle
 
         parentFragmentManager

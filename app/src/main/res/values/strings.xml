@@ -16,4 +16,8 @@
     <string name="text_read_more">Read More</string>
     <string name="title_cast">Characters</string>
     <string name="genres">Genre</string>
+    <string name="play">Play</string>
+    <string name="video">Videos</string>
+    <string name="read_more">Read More</string>
+    <string name="read_less">Read Less</string>
 </resources>

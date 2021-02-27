@@ -10,7 +10,7 @@ import com.shid.mangalist.R
 import com.shid.mangalist.data.remote.response.detail.CharactersListResponse
 import com.shid.mangalist.utils.custom.CircleImageView
 
-class CharacterAdapter(private val showDetail: (character: CharactersListResponse) -> Unit) :
+class CharacterAdapter() :
     RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     private var listData = ArrayList<CharactersListResponse>()
@@ -25,7 +25,7 @@ class CharacterAdapter(private val showDetail: (character: CharactersListRespons
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_anime_list,
+            R.layout.list_item_characters,
             parent,
             false
         )
@@ -46,12 +46,12 @@ class CharacterAdapter(private val showDetail: (character: CharactersListRespons
 
     inner class CharacterViewHolder(itemView:View) :
         RecyclerView.ViewHolder(itemView) {
-        val image_character:CircleImageView = itemView.findViewById(R.id.profile_image)
-        val name_character:AppCompatTextView = itemView.findViewById(R.id.txt_name)
+        private val imageCharacter:CircleImageView = itemView.findViewById(R.id.profile_image)
+        private val nameCharacter:AppCompatTextView = itemView.findViewById(R.id.txt_name)
         fun bind(character: CharactersListResponse) {
-            image_character.load(character.imageUrl)
-            name_character.text = character.name
-            itemView.setOnClickListener { showDetail(character) }
+            imageCharacter.load(character.imageUrl)
+            nameCharacter.text = character.name
+
         }
     }
 }
