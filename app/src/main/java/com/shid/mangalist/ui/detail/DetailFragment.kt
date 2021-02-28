@@ -4,19 +4,17 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStub
 import android.widget.*
 import androidx.activity.addCallback
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.bumptech.glide.Glide
@@ -25,8 +23,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.AiringAnime
+import com.shid.mangalist.data.remote.response.detail.CharactersListResponse
 import com.shid.mangalist.databinding.DetailFragmentBinding
-import com.shid.mangalist.utils.custom.ExpandableLayout
 import com.skydoves.transformationlayout.TransformationLayout
 import com.skydoves.transformationlayout.onTransformationEndContainer
 import dagger.hilt.android.AndroidEntryPoint
@@ -142,11 +140,7 @@ class DetailFragment : Fragment() {
 
         detailViewModel.characters.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
-                rv_characters.apply {
-                    setHasFixedSize(true)
-                    adapter = characterAdapter
-                }
-                characterAdapter.setData(it)
+                updateCharacterDetails(it)
             }
         })
 
@@ -161,6 +155,17 @@ class DetailFragment : Fragment() {
         })
 
 
+    }
+
+    private fun updateCharacterDetails(list: List<CharactersListResponse>?) {
+        binding.includedLayout.castList.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includedLayout.castList.visibility = View.VISIBLE
+        val characterAdapter2:CharacterAdapter = CharacterAdapter()
+        Log.d("Detail","size of list:"+ (list?.size ?: 0))
+
+        binding.includedLayout.castList.adapter = characterAdapter2
+        characterAdapter2.setData(list)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

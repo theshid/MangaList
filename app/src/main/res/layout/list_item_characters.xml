@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginEnd="10dp">
 
 
     <com.shid.mangalist.utils.custom.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="@dimen/profile_item_image_size"
         android:layout_height="@dimen/profile_item_image_size"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginRight="@dimen/margin"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:civ_border_color="@android:color/transparent"
-        app:civ_border_width="0dp"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +28,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/arkhip_font"
         android:maxEms="6"
+        android:text="Name"
         android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="@dimen/font_small"

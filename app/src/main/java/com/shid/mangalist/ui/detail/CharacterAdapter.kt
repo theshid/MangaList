@@ -25,10 +25,8 @@ class CharacterAdapter() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.list_item_characters,
-            parent,
-            false
-        )
+            R.layout.list_item_cast,
+            parent, false)
         return CharacterViewHolder(view)
     }
 
@@ -46,11 +44,13 @@ class CharacterAdapter() :
 
     inner class CharacterViewHolder(itemView:View) :
         RecyclerView.ViewHolder(itemView) {
-        private val imageCharacter:CircleImageView = itemView.findViewById(R.id.profile_image)
-        private val nameCharacter:AppCompatTextView = itemView.findViewById(R.id.txt_name)
+        private val imageCharacter:CircleImageView = itemView.findViewById(R.id.image_cast)
+        private val nameCharacter:AppCompatTextView = itemView.findViewById(R.id.name_cast)
         fun bind(character: CharactersListResponse) {
             imageCharacter.load(character.imageUrl)
             nameCharacter.text = character.name
+
+
 
         }
     }
