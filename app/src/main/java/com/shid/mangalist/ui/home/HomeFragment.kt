@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
-import com.shid.mangalist.data.local.entities.AiringAnime
+import com.shid.mangalist.data.local.entities.*
 import com.shid.mangalist.ui.detail.DetailFragment
+import com.shid.mangalist.utils.GsonParser
+import com.shid.mangalist.utils.custom.RecyclerItemClickListener
 import com.shid.mangalist.utils.enum.More
 import com.skydoves.transformationlayout.TransformationLayout
 import com.skydoves.transformationlayout.addTransformation
@@ -27,7 +30,9 @@ import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
+class HomeFragment : Fragment(), TopAiringAdapter.AnimeDelegate,
+    TopTvAdapter.AnimeDelegate, TopUpcomingAdapter.AnimeDelegate, TopOvaAdapter.AnimeDelegate,
+    TopMovieAdapter.AnimeDelegate {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -71,8 +76,8 @@ class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
         return root
     }
 
-    companion object{
-         lateinit var typeAnime:String
+    companion object {
+        lateinit var typeAnime: String
     }
 
     private fun clickListeners() {
@@ -139,7 +144,7 @@ class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
         linearLayoutManager4.reverseLayout = true
         linearLayoutManager4.stackFromEnd = true
 
-        
+
 
 
 
@@ -150,22 +155,22 @@ class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
 
         upcomingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_upcoming)
         upcomingRecyclerView.layoutManager = linearLayoutManager1
-        topUpcomingAdapter = TopUpcomingAdapter()
+        topUpcomingAdapter = TopUpcomingAdapter(this)
         upcomingRecyclerView.adapter = topUpcomingAdapter
 
         tvRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_tv)
         tvRecyclerView.layoutManager = linearLayoutManager2
-        topTvAdapter = TopTvAdapter()
+        topTvAdapter = TopTvAdapter(this)
         tvRecyclerView.adapter = topTvAdapter
 
         movieRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_movie)
         movieRecyclerView.layoutManager = linearLayoutManager3
-        topMovieAdapter = TopMovieAdapter()
+        topMovieAdapter = TopMovieAdapter(this)
         movieRecyclerView.adapter = topMovieAdapter
 
         ovaRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_ova)
         ovaRecyclerView.layoutManager = linearLayoutManager4
-        topOvaAdapter = TopOvaAdapter()
+        topOvaAdapter = TopOvaAdapter(this)
         ovaRecyclerView.adapter = topOvaAdapter
     }
 
@@ -205,12 +210,14 @@ class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
 
     }
 
+
     override fun onItemClick(airingAnime: AiringAnime, itemView: TransformationLayout) {
         val fragment = DetailFragment()
         // [Step2]: getBundle from the TransformationLayout.
         val bundle = itemView.getBundle(DetailFragment.paramsKey)
-        bundle.putParcelable(DetailFragment.posterKey, airingAnime)
+       // bundle.putParcelable(DetailFragment.posterKey, airingAnime)
         airingAnime.id?.let { bundle.putInt("key", it) }
+        airingAnime.imageUrl?.let { bundle.putString("key2",airingAnime.imageUrl) }
         fragment.arguments = bundle
 
         parentFragmentManager
@@ -221,4 +228,76 @@ class HomeFragment : Fragment(),TopAiringAdapter.AnimeDelegate {
             .addToBackStack(DetailFragment.TAG)
             .commit()
     }
+
+    override fun onItemClick(tvAnime: TvAnime, itemView: TransformationLayout) {
+        val fragment = DetailFragment()
+        // [Step2]: getBundle from the TransformationLayout.
+        val bundle = itemView.getBundle(DetailFragment.paramsKey)
+        //bundle.putParcelable(DetailFragment.posterKey2, tvAnime)
+        tvAnime.id?.let { bundle.putInt("key", it) }
+        tvAnime.imageUrl?.let { bundle.putString("key2",tvAnime.imageUrl) }
+        fragment.arguments = bundle
+
+        parentFragmentManager
+            .beginTransaction()
+            // [Step3]: addTransformation using the TransformationLayout.
+            .addTransformation(itemView)
+            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
+            .addToBackStack(DetailFragment.TAG)
+            .commit()
+    }
+
+    override fun onItemClick(upcomingAnime: UpcomingAnime, itemView: TransformationLayout) {
+        val fragment = DetailFragment()
+        // [Step2]: getBundle from the TransformationLayout.
+        val bundle = itemView.getBundle(DetailFragment.paramsKey)
+       // bundle.putParcelable(DetailFragment.posterKey3, upcomingAnime)
+        upcomingAnime.id?.let { bundle.putInt("key", it) }
+        upcomingAnime.imageUrl?.let { bundle.putString("key2",it) }
+        fragment.arguments = bundle
+
+        parentFragmentManager
+            .beginTransaction()
+            // [Step3]: addTransformation using the TransformationLayout.
+            .addTransformation(itemView)
+            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
+            .addToBackStack(DetailFragment.TAG)
+            .commit()
+    }
+
+    override fun onItemClick(ovaAnime: OvaAnime, itemView: TransformationLayout) {
+        val fragment = DetailFragment()
+        // [Step2]: getBundle from the TransformationLayout.
+        val bundle = itemView.getBundle(DetailFragment.paramsKey)
+       // bundle.putParcelable(DetailFragment.posterKey4, ovaAnime)
+        ovaAnime.id?.let { bundle.putInt("key", it) }
+        ovaAnime.imageUrl?.let { bundle.putString("key2",ovaAnime.imageUrl) }
+        fragment.arguments = bundle
+
+        parentFragmentManager
+            .beginTransaction()
+            .addTransformation(itemView)
+            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
+            .addToBackStack(DetailFragment.TAG)
+            .commit()
+    }
+
+    override fun onItemClick(movieAnime: MovieAnime, itemView: TransformationLayout) {
+        val fragment = DetailFragment()
+        val bundle = itemView.getBundle(DetailFragment.paramsKey)
+       // bundle.putParcelable(DetailFragment.posterKey5, movieAnime)
+        movieAnime.id?.let { bundle.putInt("key", it) }
+        movieAnime.imageUrl?.let { bundle.putString("key2",movieAnime.imageUrl) }
+        fragment.arguments = bundle
+
+        parentFragmentManager
+            .beginTransaction()
+            // [Step3]: addTransformation using the TransformationLayout.
+            .addTransformation(itemView)
+            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
+            .addToBackStack(DetailFragment.TAG)
+            .commit()
+    }
+
+
 }

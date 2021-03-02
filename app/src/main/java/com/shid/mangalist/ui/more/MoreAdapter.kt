@@ -3,6 +3,7 @@ package com.shid.mangalist.ui.more
 import android.app.Activity
 import android.graphics.Insets
 import android.os.Build
+import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -16,19 +17,32 @@ import coil.load
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.AiringAnime
+import com.shid.mangalist.data.local.entities.TvAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.home.MoreDiffUtils
+import com.shid.mangalist.ui.home.TopAiringAdapter
 import com.shid.mangalist.ui.home.TopAiringDiffUtils
+import com.shid.mangalist.ui.home.TopTvAdapter
+import com.skydoves.transformationlayout.TransformationLayout
 
 
-class MoreAdapter constructor(var activity2: Activity) :
+class MoreAdapter constructor(var activity2: Activity,private val delegate: AnimeDelegate) :
     PagingDataAdapter<AnimeListResponse, MoreAdapter.MoreViewHolder>(MoreDiffUtils) {
+    var previousTime = SystemClock.elapsedRealtime()
     companion object {
         lateinit var activity: Activity
+        lateinit var dele: AnimeDelegate
+        var prevTime:Long = 0
     }
 
     init {
         activity = activity2
+        dele = delegate
+        prevTime = previousTime
+    }
+
+    interface AnimeDelegate {
+        fun onItemClick(anime: AnimeListResponse, itemView: TransformationLayout)
     }
 
     fun getAnimeItem(position: Int): AnimeListResponse {
@@ -56,7 +70,8 @@ class MoreAdapter constructor(var activity2: Activity) :
         private val image: ImageView = itemView.findViewById(R.id.image)
         private val title: TextView = itemView.findViewById(R.id.txt_title)
         private val score: TextView = itemView.findViewById(R.id.score_more)
-
+        private val transformationLayout =
+            itemView.findViewById<TransformationLayout>(R.id.transformationLayout_more)
 
         /*init {
             itemView.layoutParams = RecyclerView.LayoutParams(
@@ -70,6 +85,16 @@ class MoreAdapter constructor(var activity2: Activity) :
             image.load(anime.imageUrl)
             title.text = anime.title
             score.text = anime.score.toString()
+            transformationLayout.transitionName = anime.title
+            itemView.apply {
+                rootView.setOnClickListener(View.OnClickListener {
+                    val now = SystemClock.elapsedRealtime()
+                    if (now - prevTime >= transformationLayout.duration) {
+                        dele.onItemClick(anime, transformationLayout)
+                        prevTime = now
+                    }
+                })
+            }
             // (activity as MainActivity).updateBackground(anime.imageUrl)
         }
 

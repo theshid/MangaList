@@ -17,18 +17,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
+import com.shid.mangalist.ui.detail.DetailFragment
 import com.shid.mangalist.ui.home.*
 import com.shid.mangalist.utils.custom.BaseFragment
 import com.shid.mangalist.utils.custom.RecyclerItemClickListener
 import com.shid.mangalist.utils.custom.RecyclerSnapItemListener
 import com.shid.mangalist.utils.enum.More
+import com.skydoves.transformationlayout.TransformationLayout
+import com.skydoves.transformationlayout.addTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
-class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewItemClickListener {
+class MoreFragment : BaseFragment(), MoreAdapter.AnimeDelegate{
     private val moreViewModel: MoreViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MoreAdapter
@@ -55,10 +58,10 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+        /*val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             goToHome()
         }
-        callback.isEnabled
+        callback.isEnabled*/
 
     }
 
@@ -66,7 +69,7 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
     @ExperimentalPagingApi
     private fun setView(root: View, type: String) {
         recyclerView = root.findViewById(R.id.rv_top)
-        adapter = MoreAdapter(activity)
+        adapter = MoreAdapter(activity,this)
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         linearLayoutManager.reverseLayout = true
@@ -98,13 +101,28 @@ class MoreFragment : BaseFragment(), RecyclerItemClickListener.OnRecyclerViewIte
 
     fun goToHome() {
         findNavController().navigate(
-            MoreFragmentDirections.actionMoreFragmentToHomeFragment(
-            )
+            MoreFragmentDirections.actionMoreFragmentToHomeFragment()
         )
     }
 
-    override fun onItemClick(parentView: View?, childView: View?, position: Int) {
-        TODO("Not yet implemented")
+
+
+    override fun onItemClick(anime: AnimeListResponse, itemView: TransformationLayout) {
+        val fragment = DetailFragment()
+        // [Step2]: getBundle from the TransformationLayout.
+        val bundle = itemView.getBundle(DetailFragment.paramsKey)
+        // bundle.putParcelable(DetailFragment.posterKey3, upcomingAnime)
+        anime.id?.let { bundle.putInt("key", it) }
+        anime.imageUrl?.let { bundle.putString("key2",it) }
+        fragment.arguments = bundle
+
+        parentFragmentManager
+            .beginTransaction()
+            // [Step3]: addTransformation using the TransformationLayout.
+            .addTransformation(itemView)
+            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
+            .addToBackStack(DetailFragment.TAG)
+            .commit()
     }
 
 }
