@@ -10,17 +10,18 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {
 
-    suspend fun getAiringAnime(): Flow<PagingData<AiringAnime>>
+    suspend fun getTopAnime(type:String): List<AnimeListResponse>
 
-    suspend fun getMovieAnime(): Flow<PagingData<MovieAnime>>
+    suspend fun getDetailAnime(id: Int): DetailAnimeResponse
 
-    suspend fun getOvaAnime(): Flow<PagingData<OvaAnime>>
+    suspend fun getSeasonAnime(year: Int, season: String): List<AnimeListResponse>
 
-    suspend fun getTvAnime(): Flow<PagingData<TvAnime>>
+    suspend fun getSearchAnime(query: String): List<AnimeListResponse>
 
-    suspend fun getUpcomingAnime(): Flow<PagingData<UpcomingAnime>>
+    suspend fun getCharacters(id: Int): List<CharactersListResponse>
 
-    suspend fun getTopAnime(type:String,page:Int): List<AnimeListResponse>
+    suspend fun getVideos(id: Int): List<Promo>
+}
 
 
 
@@ -31,4 +32,3 @@ interface AnimeRepository {
 
 
 
-}

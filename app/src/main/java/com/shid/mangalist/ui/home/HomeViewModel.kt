@@ -8,61 +8,62 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.shid.mangalist.data.local.entities.*
+import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.data.repository.IAnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalPagingApi
 @HiltViewModel
 class HomeViewModel @ExperimentalPagingApi
  @Inject constructor(
     private val repository: IAnimeRepository
 ): ViewModel() {
 
-    @ExperimentalPagingApi
+    private var _animeAiring = MutableLiveData<List<AnimeListResponse>>()
+    val animeAiring: LiveData<List<AnimeListResponse>>
+        get() = _animeAiring
 
-    suspend fun getTopAiringAnimes(): Flow<PagingData<AiringAnime>> {
-        return repository
-            .getAiringAnime()
-            .cachedIn(viewModelScope)
-            .flowOn(Dispatchers.IO)
-    }
+    private var _animeUpcoming = MutableLiveData<List<AnimeListResponse>>()
+    val animeUpcoming: LiveData<List<AnimeListResponse>>
+        get() = _animeUpcoming
 
-    @ExperimentalPagingApi
+    private var _animeTV = MutableLiveData<List<AnimeListResponse>>()
+    val animeTV: LiveData<List<AnimeListResponse>>
+        get() = _animeTV
 
-    suspend fun getTopUpcomingAnimes(): Flow<PagingData<UpcomingAnime>> {
-        return repository
-            .getUpcomingAnime()
-            .cachedIn(viewModelScope)
-            .flowOn(Dispatchers.IO)
-    }
+    private var _animeMovie = MutableLiveData<List<AnimeListResponse>>()
+    val animeMovie: LiveData<List<AnimeListResponse>>
+        get() = _animeMovie
 
-    @ExperimentalPagingApi
+    private var _animeOva = MutableLiveData<List<AnimeListResponse>>()
+    val animeOva: LiveData<List<AnimeListResponse>>
+        get() = _animeOva
 
-    suspend fun getTopTvAnimes(): Flow<PagingData<TvAnime>> {
-        return repository
-            .getTvAnime()
-            .cachedIn(viewModelScope)
-            .flowOn(Dispatchers.IO)
-    }
+    init {
+        viewModelScope.launch {
+            try {
+                val resultAiring = repository.getTopAnime("airing")
+                _animeAiring.value = resultAiring
 
-    @ExperimentalPagingApi
+                val resultUpcoming = repository.getTopAnime("upcoming")
+                _animeUpcoming.value = resultUpcoming
 
-    suspend fun getTopMovieAnimes(): Flow<PagingData<MovieAnime>> {
-        return repository
-            .getMovieAnime()
-            .cachedIn(viewModelScope)
-            .flowOn(Dispatchers.IO)
-    }
+                val resultTV = repository.getTopAnime("tv")
+                _animeTV.value = resultTV
 
-    @ExperimentalPagingApi
+                val resultMovie = repository.getTopAnime("movie")
+                _animeMovie.value = resultMovie
 
-    suspend fun getTopOvaAnimes(): Flow<PagingData<OvaAnime>> {
-        return repository
-            .getOvaAnime()
-            .cachedIn(viewModelScope)
-            .flowOn(Dispatchers.IO)
+                val resultOva = repository.getTopAnime("ova")
+                _animeOva.value = resultOva
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
     }
 }

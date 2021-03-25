@@ -57,7 +57,7 @@
         tools:layout="@layout/detail_fragment" >
         <argument
             android:name="anime"
-            app:argType="string" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_detailFragment_to_homeFragment"
             app:destination="@id/navigation_home"

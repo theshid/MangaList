@@ -20,82 +20,12 @@ import javax.inject.Singleton
 @ExperimentalPagingApi
 @Singleton
 class IAnimeRepository @Inject constructor(
-    private val database: AnimeDatabase,
-    private val airingAnimeRemoteMediator: AiringAnimeRemoteMediator,
-    private val movieAnimeRemoteMediator: MovieAnimeRemoteMediator,
-    private val ovaAnimeRemoteMediator: OvaAnimeRemoteMediator,
-    private val tvAnimeRemoteMediator: TvAnimeRemoteMediator,
-    private val upcomingAnimeRemoteMediator: UpcomingAnimeRemoteMediator,
     private val remoteDataSource: RemoteDataSource
 ):AnimeRepository {
-    override suspend fun getAiringAnime(): Flow<PagingData<AiringAnime>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                prefetchDistance = 5,
-                initialLoadSize = 40
-            ),
-            remoteMediator = airingAnimeRemoteMediator,
-            pagingSourceFactory = { database.animeDao().getAiringAnimes() }
-        ).flow
-    }
 
-    override suspend fun getMovieAnime(): Flow<PagingData<MovieAnime>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                prefetchDistance = 5,
-                initialLoadSize = 40
-            ),
-            remoteMediator = movieAnimeRemoteMediator,
-            pagingSourceFactory = { database.animeDao().getMovies() }
-        ).flow
-    }
-
-    override suspend fun getOvaAnime(): Flow<PagingData<OvaAnime>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                prefetchDistance = 5,
-                initialLoadSize = 40
-            ),
-            remoteMediator = ovaAnimeRemoteMediator,
-            pagingSourceFactory = { database.animeDao().getOvaAnimes() }
-        ).flow
-    }
-
-    override suspend fun getTvAnime(): Flow<PagingData<TvAnime>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                prefetchDistance = 5,
-                initialLoadSize = 40
-            ),
-            remoteMediator = tvAnimeRemoteMediator,
-            pagingSourceFactory = { database.animeDao().getTvAnimes() }
-        ).flow
-    }
-
-    override suspend fun getUpcomingAnime(): Flow<PagingData<UpcomingAnime>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                prefetchDistance = 5,
-                initialLoadSize = 40
-            ),
-            remoteMediator = upcomingAnimeRemoteMediator,
-            pagingSourceFactory = { database.animeDao().getUpcomingAnimes() }
-        ).flow
-    }
-
-    override suspend fun getTopAnime(type: String, page: Int): List<AnimeListResponse> {
+    override suspend fun getTopAnime(type: String): List<AnimeListResponse> {
         lateinit var animeResult: List<AnimeListResponse>
-        remoteDataSource.getTopAnime(type,page, object : RemoteDataSource.GetAnimeCallback {
+        remoteDataSource.getTopAnime(type, object : RemoteDataSource.GetAnimeCallback {
             override fun onAnimeReceived(animeList: List<AnimeListResponse>) {
                 animeResult = animeList
             }
@@ -103,7 +33,55 @@ class IAnimeRepository @Inject constructor(
         return animeResult
     }
 
+    override suspend fun getDetailAnime(id: Int): DetailAnimeResponse {
+        lateinit var animeDetail: DetailAnimeResponse
+        remoteDataSource.getDetailAnime(id, object : RemoteDataSource.GetDetailCallback {
+            override fun onAnimeReceived(anime: DetailAnimeResponse) {
+                animeDetail = anime
+            }
+        })
+        return animeDetail
+    }
 
+    override suspend fun getSeasonAnime(year: Int, season: String): List<AnimeListResponse> {
+        lateinit var animeSeason: List<AnimeListResponse>
+        remoteDataSource.getSeasonAnime(year, season, object : RemoteDataSource.GetAnimeCallback {
+            override fun onAnimeReceived(animeList: List<AnimeListResponse>) {
+                animeSeason = animeList
+            }
+        })
+        return animeSeason
+    }
+
+    override suspend fun getSearchAnime(query: String): List<AnimeListResponse> {
+        lateinit var animeResult: List<AnimeListResponse>
+        remoteDataSource.getSearchAnime(query, object : RemoteDataSource.GetAnimeCallback {
+            override fun onAnimeReceived(animeList: List<AnimeListResponse>) {
+                animeResult = animeList
+            }
+        })
+        return animeResult
+    }
+
+    override suspend fun getCharacters(id: Int): List<CharactersListResponse> {
+        lateinit var charactersResult: List<CharactersListResponse>
+        remoteDataSource.getCharacters(id, object : RemoteDataSource.GetCharactersCallback {
+            override fun onCharactersReceived(characters: List<CharactersListResponse>) {
+                charactersResult = characters
+            }
+        })
+        return charactersResult
+    }
+
+    override suspend fun getVideos(id: Int): List<Promo> {
+        lateinit var videosResult: List<Promo>
+        remoteDataSource.getVideos(id, object : RemoteDataSource.GetVideosCallback {
+            override fun onVideosReceived(videos: List<Promo>) {
+                videosResult = videos
+            }
+        })
+        return videosResult
+    }
 
 
 }

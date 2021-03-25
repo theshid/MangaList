@@ -12,8 +12,8 @@ import retrofit2.http.Query
 
 interface ApiServices {
     //top/anime/{page}/{type}
-    @GET("top/anime/{page}/{type}")
-    suspend fun getTopAnime(@Path("type") type: String,@Path("page") page: Int): TopAnimeResponse
+    @GET("top/anime/1/{type}")
+    suspend fun getTopAnime(@Path("type") type: String): TopAnimeResponse
 
     @GET("top/anime/1/{type}")
     suspend fun getTop(@Path("type") type: String): TopAnimeResponse
