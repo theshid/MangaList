@@ -1,19 +1,12 @@
 package com.shid.mangalist.data.repository
 
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.shid.mangalist.data.local.db.AnimeDatabase
-import com.shid.mangalist.data.local.entities.*
-import com.shid.mangalist.data.remote.AnimePagingSource
+
 import com.shid.mangalist.data.remote.RemoteDataSource
-import com.shid.mangalist.data.remote.remoteMediators.*
 import com.shid.mangalist.data.remote.response.detail.CharactersListResponse
 import com.shid.mangalist.data.remote.response.detail.DetailAnimeResponse
 import com.shid.mangalist.data.remote.response.detail.Promo
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 

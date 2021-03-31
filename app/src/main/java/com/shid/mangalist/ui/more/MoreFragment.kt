@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
-class MoreFragment : BaseFragment(), MoreAdapter.AnimeDelegate{
+class MoreFragment : BaseFragment() {
     private val moreViewModel: MoreViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MoreAdapter
@@ -68,16 +68,23 @@ class MoreFragment : BaseFragment(), MoreAdapter.AnimeDelegate{
 
     @ExperimentalPagingApi
     private fun setView(root: View, type: String) {
+        moreViewModel.setType(type)
         recyclerView = root.findViewById(R.id.rv_top)
-        adapter = MoreAdapter(activity,this)
+        adapter = MoreAdapter(activity) { id -> showDetail(id) }
+        recyclerView.adapter = adapter
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager.reverseLayout = true
-        linearLayoutManager.stackFromEnd = true
+        lifecycleScope.launch {
+            moreViewModel.animeAiring.observe(viewLifecycleOwner, { anime ->
+                if (anime != null) {
+                    adapter.setData(anime)
+                }
+            })
+        }
         recyclerView.apply {
             layoutManager = linearLayoutManager
             setHasFixedSize(true)
-            adapter = adapter
+
         }
 
         var snapHelper = com.shid.mangalist.utils.custom.PagerSnapHelper { position ->
@@ -89,12 +96,7 @@ class MoreFragment : BaseFragment(), MoreAdapter.AnimeDelegate{
         snapHelper.attachToRecyclerView(recyclerView)
 
 
-        lifecycleScope.launch {
-            moreViewModel.animes.collectLatest {
-                recyclerView.adapter = adapter
-                adapter.submitData(it)
-            }
-        }
+
 
 
     }
@@ -105,24 +107,10 @@ class MoreFragment : BaseFragment(), MoreAdapter.AnimeDelegate{
         )
     }
 
-
-
-    override fun onItemClick(anime: AnimeListResponse, itemView: TransformationLayout) {
-        val fragment = DetailFragment()
-        // [Step2]: getBundle from the TransformationLayout.
-        val bundle = itemView.getBundle(DetailFragment.paramsKey)
-        // bundle.putParcelable(DetailFragment.posterKey3, upcomingAnime)
-        anime.id?.let { bundle.putInt("key", it) }
-        anime.imageUrl?.let { bundle.putString("key2",it) }
-        fragment.arguments = bundle
-
-        parentFragmentManager
-            .beginTransaction()
-            // [Step3]: addTransformation using the TransformationLayout.
-            .addTransformation(itemView)
-            .replace(R.id.nav_host_fragment, fragment, DetailFragment.TAG)
-            .addToBackStack(DetailFragment.TAG)
-            .commit()
+    private fun showDetail(id: Int) {
+        this.findNavController()
+            .navigate(MoreFragmentDirections.actionMoreFragmentToDetailAnimeFragment(id))
     }
+
 
 }

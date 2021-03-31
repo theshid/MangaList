@@ -39,7 +39,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 class DetailFragment : Fragment() {
     lateinit var rootView: ScrollView
     lateinit var trans_imageView: ImageView
-    val detailViewModel: DetailViewModel by viewModels()
+    private val detailViewModel: DetailViewModel by viewModels()
     private lateinit var rv_characters: RecyclerView
     private lateinit var rv_video: RecyclerView
     private lateinit var linearLayout: LinearLayout
@@ -48,7 +48,7 @@ class DetailFragment : Fragment() {
     private lateinit var animeTitle: AppCompatTextView
     private lateinit var animeSummary: AppCompatTextView
     private var anime_id: Int? = null
-    private var image_url:String ?= null
+    private var image_url: String? = null
     private lateinit var backgroundImg: ImageView
     private var _binding: DetailFragmentBinding? = null
     private val binding get() = _binding!!
@@ -56,21 +56,14 @@ class DetailFragment : Fragment() {
     companion object {
         fun newInstance() = DetailFragment()
         const val TAG = "LibraryFragment"
-        const val posterKey = "posterKey"
-        const val posterKey2 = "posterKey"
-        const val posterKey3 = "posterKey"
-        const val posterKey4 = "posterKey"
-        const val posterKey5 = "posterKey"
-        const val paramsKey = "paramsKey"
-    }
 
-    private lateinit var viewModel: DetailViewModel
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val params = arguments?.getParcelable<TransformationLayout.Params>(paramsKey)
-        onTransformationEndContainer(params)
+
+        //onTransformationEndContainer(params)
 
         /*val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             goToHome()
@@ -99,10 +92,9 @@ class DetailFragment : Fragment() {
         /*val animeObject =
             GsonParser.getGsonParser()?.fromJson<AiringAnime>(jsonFromActivity,AiringAnime::class.java)*/
         setUi(view)
-        anime_id = arguments?.getInt("key")
-        image_url = arguments?.getString("key2")
 
-        trans_imageView.load(image_url)
+
+        //trans_imageView.load(image_url)
 
         val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
         bottomNav.visibility = View.GONE
@@ -126,21 +118,16 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // val poster = arguments?.getParcelable<AiringAnime>(posterKey)
+        // val poster = arguments?.getParcelable<AiringAnime>(posterKey)
 
-
-
+        val animeId = DetailFragmentArgs.fromBundle(requireArguments()).anime
+        detailViewModel.setDetailAnime(animeId)
         videoAdapter = VideoAdapter { url -> showVideo(url) }
         characterAdapter = CharacterAdapter()
-
-
-
-
-
         anime_id?.let { detailViewModel.setDetailAnime(it) }
         detailViewModel.anime.observe(viewLifecycleOwner, Observer {
-            rootView.transitionName = it.title
-            //trans_imageView.load(it.imageUrl)
+
+            trans_imageView.load(it.imageUrl)
             anime_id = it.id
             Glide.with(backgroundImg.context).load(it.imageUrl)
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
@@ -196,10 +183,6 @@ class DetailFragment : Fragment() {
         characterAdapter2.setData(list)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
 
     private fun showVideo(url: String?) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

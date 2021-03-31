@@ -124,30 +124,25 @@ class HomeFragment : Fragment(){
 
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager.reverseLayout = true
-        linearLayoutManager.stackFromEnd = true
+
 
         val linearLayoutManager1 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager1.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager1.reverseLayout = true
-        linearLayoutManager1.stackFromEnd = true
+
 
         val linearLayoutManager2 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager2.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager2.reverseLayout = true
-        linearLayoutManager2.stackFromEnd = true
+
 
 
         val linearLayoutManager3 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager3.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager3.reverseLayout = true
-        linearLayoutManager3.stackFromEnd = true
+
 
 
         val linearLayoutManager4 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager4.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager4.reverseLayout = true
-        linearLayoutManager4.stackFromEnd = true
+
 
 
         airingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_airing)
@@ -198,7 +193,7 @@ class HomeFragment : Fragment(){
         lifecycleScope.launch {
             homeViewModel.animeMovie.observe(viewLifecycleOwner,{ anime ->
                 if (anime.isNotEmpty()) {
-                    topUpcomingAdapter.setData(anime)
+                    topMovieAdapter.setData(anime)
                 }
             })
         }
@@ -206,7 +201,7 @@ class HomeFragment : Fragment(){
         lifecycleScope.launch {
             homeViewModel.animeTV.observe(viewLifecycleOwner,{ anime ->
                 if (anime.isNotEmpty()) {
-                    topUpcomingAdapter.setData(anime)
+                    topTvAdapter.setData(anime)
                 }
             })
         }
@@ -214,7 +209,7 @@ class HomeFragment : Fragment(){
         lifecycleScope.launch {
             homeViewModel.animeOva.observe(viewLifecycleOwner,{ anime ->
                 if (anime.isNotEmpty()) {
-                    topUpcomingAdapter.setData(anime)
+                    topOvaAdapter.setData(anime)
                 }
             })
         }

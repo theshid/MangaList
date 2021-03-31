@@ -9,57 +9,68 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 
-class MoreAdapter2(var activity: Activity, var animeList: ArrayList<AnimeListResponse>) :
-    RecyclerView.Adapter<MoreAdapter2.MoreViewHolder>() {
+class MoreAdapter2 constructor(var activity2: Activity,private val delegate: AnimeDelegate) :
+    PagingDataAdapter<AnimeListResponse, MoreAdapter2.MoreViewHolder>(MoreDiffUtils) {
 
-    companion object{
-      lateinit var activity2:Activity
+    companion object {
+        lateinit var activity: Activity
+        lateinit var dele: AnimeDelegate
+        var prevTime:Long = 0
     }
 
     init {
-        activity2 = activity
+        activity = activity2
+        dele = delegate
+    }
+
+    interface AnimeDelegate {
+        fun onItemClick(anime: AnimeListResponse)
     }
 
     fun getAnimeItem(position: Int): AnimeListResponse {
-        return animeList[position]
+        return getItem(position)!!
     }
 
-    fun setItems(list: ArrayList<AnimeListResponse>) {
-        val startPosition: Int = list.size
-        list.addAll(list)
-        notifyItemRangeChanged(startPosition, list.size)
-    }
 
     override fun onBindViewHolder(holder: MoreViewHolder, position: Int) {
-        animeList[position]?.let { holder.bindTo(it) }
+        getItem(position)?.let { holder.bindTo(it) }
+
     }
 
-    override fun getItemCount(): Int {
-        return animeList.size
-    }
 
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MoreViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_item_more, parent, false)
+        return MoreViewHolder(view)
+    }
 
     class MoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val image: ImageView = itemView.findViewById(R.id.image)
-
-
-        init {
-            itemView.layoutParams = RecyclerView.LayoutParams(
-                getScreenWidth(activity2) * 0.85f.toInt(),
-                RecyclerView.LayoutParams.WRAP_CONTENT
-            )
-        }
-
+        private val title: TextView = itemView.findViewById(R.id.txt_title)
+        private val score: TextView = itemView.findViewById(R.id.score_more)
 
         fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
+            title.text = anime.title
+            score.text = anime.score.toString()
+            itemView.apply {
+                rootView.setOnClickListener(View.OnClickListener {
+
+                })
+            }
+            // (activity as MainActivity).updateBackground(anime.imageUrl)
         }
 
         fun getScreenWidth(activity: Activity): Int {
@@ -75,13 +86,4 @@ class MoreAdapter2(var activity: Activity, var animeList: ArrayList<AnimeListRes
             }
         }
     }
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoreViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item_more, parent, false)
-        return MoreViewHolder(view)
-    }
-
-
 }
