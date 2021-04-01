@@ -31,6 +31,88 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_top_trending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title_trending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="12dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/quicksand_semibold"
+            android:text="Trending"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@drawable/ic_arrow" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="1dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+               >
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="150dp"
+                    android:id="@+id/img_trending"
+                    />
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="150dp"
+                    android:id="@+id/img_trending2"
+                    android:layout_toEndOf="@+id/img_trending"
+                    android:layout_marginStart="5dp"/>
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="150dp"
+                    android:id="@+id/img_trending3"
+                    android:layout_toEndOf="@+id/img_trending2"
+                    android:layout_marginStart="5dp"/>
+
+
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/layout_top_upcoming"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +126,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:layout_weight="1"
             android:fontFamily="@font/quicksand_semibold"
@@ -59,6 +140,8 @@
             android:layout_marginEnd="16dp"
             app:srcCompat="@drawable/ic_arrow" />
     </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -80,19 +163,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_top_upcoming"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:paddingHorizontal="8dp"
-                android:background="@color/navy_blue"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -156,18 +235,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp">
+                >
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_top_movie2"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="270dp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:paddingHorizontal="8dp"
-                    android:background="@color/navy_blue"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +273,7 @@
             android:layout_marginBottom="12dp"
             android:layout_weight="1"
             android:fontFamily="@font/quicksand_semibold"
-            android:text="Top Movies"
+            android:text="Top Tv Shows"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -224,24 +300,23 @@
             android:background="@color/colorAccent"
             app:cardCornerRadius="8dp"
             app:cardElevation="3dp"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            android:layout_marginBottom="?attr/actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp">
+                >
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_top_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
                     android:layout_marginTop="16dp"
                     android:clipToPadding="false"
                     android:orientation="horizontal"
                     android:paddingHorizontal="8dp"
-                    android:background="@color/navy_blue"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

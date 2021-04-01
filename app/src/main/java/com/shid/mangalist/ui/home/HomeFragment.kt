@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
@@ -13,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.asksira.loopingviewpager.LoopingPagerAdapter
 import com.asksira.loopingviewpager.LoopingViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -63,6 +66,19 @@ class HomeFragment : Fragment() {
     private lateinit var viewPager: LoopingViewPager
     private lateinit var viewPagerAdapter: LoopingPagerAdapter<AnimeListResponse>
 
+    private lateinit var imgTrending:ImageView
+    private lateinit var imgTrending2:ImageView
+    private lateinit var imgTrending3:ImageView
+    private var img_id:Int?= null
+    private var img_id1:Int?= null
+    private var img_id2:Int?= null
+
+    private lateinit var layout_trending:LinearLayout
+    private lateinit var layout_upcoming:LinearLayout
+    private lateinit var layout_movie:LinearLayout
+    private lateinit var layout_tv:LinearLayout
+
+
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
 
@@ -103,21 +119,29 @@ class HomeFragment : Fragment() {
             showMore(More.AIRING)
         })
 
-        /*txt_moreUpcoming.setOnClickListener(View.OnClickListener {
+        layout_upcoming.setOnClickListener(View.OnClickListener {
             showMore(More.UPCOMING)
         })
 
-        txt_moreTv.setOnClickListener(View.OnClickListener {
-            showMore(More.TV)
-        })
-
-        txt_moreMovie.setOnClickListener(View.OnClickListener {
+        layout_movie.setOnClickListener(View.OnClickListener {
             showMore(More.MOVIE)
         })
 
-        txt_moreOva.setOnClickListener(View.OnClickListener {
-            showMore(More.OVA)
-        })*/
+        layout_tv.setOnClickListener(View.OnClickListener {
+            showMore(More.TV)
+        })
+
+        imgTrending.setOnClickListener(View.OnClickListener {
+            img_id?.let { it1 -> showDetail(it1) }
+        })
+
+        imgTrending2.setOnClickListener(View.OnClickListener {
+            img_id1?.let { it1 -> showDetail(it1) }
+        })
+
+        imgTrending3.setOnClickListener(View.OnClickListener {
+            img_id2?.let { it1 -> showDetail(it1) }
+        })
     }
 
     private fun showDetail(id: Int) {
@@ -135,13 +159,17 @@ class HomeFragment : Fragment() {
         bottomNav.visibility = View.VISIBLE
         (activity as MainActivity).clearBackground()
         txt_moreAiring = view.findViewById(R.id.more_airing)
-        /*txt_moreUpcoming = view.findViewById(R.id.more_upcoming)
-        txt_moreTv = view.findViewById(R.id.more_tv)
-        txt_moreMovie = view.findViewById(R.id.more_movie)
-        txt_moreOva = view.findViewById(R.id.more_ova)*/
+
+        imgTrending = view.findViewById(R.id.img_trending)
+        imgTrending2 = view.findViewById(R.id.img_trending2)
+        imgTrending3 = view.findViewById(R.id.img_trending3)
 
         layoutBottomSheet = view.findViewById(R.id.layoutBottomSheet)
         viewPager = view.findViewById(R.id.viewpager)
+
+        layout_movie =view.findViewById(R.id.layout_top_movie)
+        layout_upcoming =view.findViewById(R.id.layout_top_upcoming)
+        layout_tv =view.findViewById(R.id.layout_top_tv)
 
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -184,10 +212,6 @@ class HomeFragment : Fragment() {
         topMovieAdapter = HomeAdapter { id -> showDetail(id) }
         movieRecyclerView.adapter = topMovieAdapter
 
-        /*ovaRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_ova)
-        ovaRecyclerView.layoutManager = linearLayoutManager4
-        topOvaAdapter = HomeAdapter { id -> showDetail(id) }
-        ovaRecyclerView.adapter = topOvaAdapter*/
     }
 
     @ExperimentalPagingApi
@@ -196,6 +220,13 @@ class HomeFragment : Fragment() {
             homeViewModel.animeAiring.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topAiringAdapter.setData(anime)
+                    imgTrending.load(anime[0].imageUrl)
+                    imgTrending2.load(anime[1].imageUrl)
+                    imgTrending3.load(anime[2].imageUrl)
+                    img_id = anime[0].id
+                    img_id1 = anime[1].id
+                    img_id2 = anime[2].id
+
                 }
             })
 
@@ -232,7 +263,7 @@ class HomeFragment : Fragment() {
                     viewPagerAdapter = LoopAnimeAdapter(
                         requireContext(),
                         anime as ArrayList<AnimeListResponse>, true
-                    )
+                    ) { id -> showDetail(id) }
                     viewPager.adapter = viewPagerAdapter
                 }
             })

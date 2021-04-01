@@ -14,7 +14,8 @@ import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 class LoopAnimeAdapter(
     context: Context,
     itemList: ArrayList<AnimeListResponse>,
-    isInfinite: Boolean
+    isInfinite: Boolean,
+    private val showDetail: (id: Int) -> Unit
 ) : LoopingPagerAdapter<AnimeListResponse>(context, itemList, isInfinite) {
 
     //This method will be triggered if the item View has not been inflated before.
@@ -39,14 +40,15 @@ class LoopAnimeAdapter(
         val title = convertView.findViewById<TextView>(R.id.pager_title)
         title.text = itemList?.get(listPosition)?.title ?: "Network error"
 
-        val summary = convertView.findViewById<TextView>(R.id.pager_summary)
-        summary.text = itemList?.get(listPosition)?.episodes.toString()
-
         val score = convertView.findViewById<TextView>(R.id.pager_score)
         score.text = itemList?.get(listPosition)?.score.toString()
 
         val poster = convertView.findViewById<ImageView>(R.id.img_pager)
         poster.load(itemList?.get(listPosition)?.imageUrl)
+
+        convertView.setOnClickListener(View.OnClickListener {
+            itemList?.get(listPosition)?.id?.let { it1 -> showDetail(it1) }
+        })
     }
 
 
