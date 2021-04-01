@@ -20,4 +20,6 @@
     <string name="video">Videos</string>
     <string name="read_more">Read More</string>
     <string name="read_less">Read Less</string>
+    <string name="search_hint">Search...</string>
+    <string name="home_bottom_dialog_title">Upcoming Animes</string>
 </resources>

@@ -13,10 +13,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.asksira.loopingviewpager.LoopingPagerAdapter
+import com.asksira.loopingviewpager.LoopingViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.card.MaterialCardView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.*
+import com.shid.mangalist.data.remote.AnimePagingSource
+import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.detail.DetailFragment
 import com.shid.mangalist.utils.GsonParser
 import com.shid.mangalist.utils.custom.RecyclerItemClickListener
@@ -31,7 +37,7 @@ import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
 
     @ExperimentalPagingApi
     private val homeViewModel: HomeViewModel by viewModels()
@@ -49,10 +55,15 @@ class HomeFragment : Fragment(){
     private lateinit var ovaRecyclerView: RecyclerView
 
     private lateinit var txt_moreAiring: TextView
-    private lateinit var txt_moreUpcoming: TextView
+    /*private lateinit var txt_moreUpcoming: TextView
     private lateinit var txt_moreTv: TextView
     private lateinit var txt_moreMovie: TextView
-    private lateinit var txt_moreOva: TextView
+    private lateinit var txt_moreOva: TextView*/
+    private lateinit var layoutBottomSheet: View
+    private lateinit var viewPager: LoopingViewPager
+    private lateinit var viewPagerAdapter: LoopingPagerAdapter<AnimeListResponse>
+
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +80,9 @@ class HomeFragment : Fragment(){
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         configureViews(root)
+        setBottomHomeFragment()
         fetchTopAnimes()
+
         clickListeners()
 
 
@@ -80,12 +93,17 @@ class HomeFragment : Fragment(){
         lateinit var typeAnime: String
     }
 
+    private fun setBottomHomeFragment() {
+
+        bottomSheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
+    }
+
     private fun clickListeners() {
         txt_moreAiring.setOnClickListener(View.OnClickListener {
             showMore(More.AIRING)
         })
 
-        txt_moreUpcoming.setOnClickListener(View.OnClickListener {
+        /*txt_moreUpcoming.setOnClickListener(View.OnClickListener {
             showMore(More.UPCOMING)
         })
 
@@ -99,7 +117,7 @@ class HomeFragment : Fragment(){
 
         txt_moreOva.setOnClickListener(View.OnClickListener {
             showMore(More.OVA)
-        })
+        })*/
     }
 
     private fun showDetail(id: Int) {
@@ -117,10 +135,13 @@ class HomeFragment : Fragment(){
         bottomNav.visibility = View.VISIBLE
         (activity as MainActivity).clearBackground()
         txt_moreAiring = view.findViewById(R.id.more_airing)
-        txt_moreUpcoming = view.findViewById(R.id.more_upcoming)
+        /*txt_moreUpcoming = view.findViewById(R.id.more_upcoming)
         txt_moreTv = view.findViewById(R.id.more_tv)
         txt_moreMovie = view.findViewById(R.id.more_movie)
-        txt_moreOva = view.findViewById(R.id.more_ova)
+        txt_moreOva = view.findViewById(R.id.more_ova)*/
+
+        layoutBottomSheet = view.findViewById(R.id.layoutBottomSheet)
+        viewPager = view.findViewById(R.id.viewpager)
 
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -134,10 +155,8 @@ class HomeFragment : Fragment(){
         linearLayoutManager2.orientation = LinearLayoutManager.HORIZONTAL
 
 
-
         val linearLayoutManager3 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager3.orientation = LinearLayoutManager.HORIZONTAL
-
 
 
         val linearLayoutManager4 = ZoomRecyclerLayout(requireContext())
@@ -160,21 +179,21 @@ class HomeFragment : Fragment(){
         topTvAdapter = HomeAdapter { id -> showDetail(id) }
         tvRecyclerView.adapter = topTvAdapter
 
-        movieRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_movie)
+        movieRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_movie2)
         movieRecyclerView.layoutManager = linearLayoutManager3
         topMovieAdapter = HomeAdapter { id -> showDetail(id) }
         movieRecyclerView.adapter = topMovieAdapter
 
-        ovaRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_ova)
+        /*ovaRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_ova)
         ovaRecyclerView.layoutManager = linearLayoutManager4
         topOvaAdapter = HomeAdapter { id -> showDetail(id) }
-        ovaRecyclerView.adapter = topOvaAdapter
+        ovaRecyclerView.adapter = topOvaAdapter*/
     }
 
     @ExperimentalPagingApi
     private fun fetchTopAnimes() {
         lifecycleScope.launch {
-            homeViewModel.animeAiring.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeAiring.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topAiringAdapter.setData(anime)
                 }
@@ -183,7 +202,7 @@ class HomeFragment : Fragment(){
 
         }
         lifecycleScope.launch {
-            homeViewModel.animeUpcoming.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeUpcoming.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topUpcomingAdapter.setData(anime)
                 }
@@ -191,7 +210,7 @@ class HomeFragment : Fragment(){
         }
 
         lifecycleScope.launch {
-            homeViewModel.animeMovie.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeMovie.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topMovieAdapter.setData(anime)
                 }
@@ -199,7 +218,7 @@ class HomeFragment : Fragment(){
         }
 
         lifecycleScope.launch {
-            homeViewModel.animeTV.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeTV.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topTvAdapter.setData(anime)
                 }
@@ -207,9 +226,14 @@ class HomeFragment : Fragment(){
         }
 
         lifecycleScope.launch {
-            homeViewModel.animeOva.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeOva.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
-                    topOvaAdapter.setData(anime)
+                    //topOvaAdapter.setData(anime)
+                    viewPagerAdapter = LoopAnimeAdapter(
+                        requireContext(),
+                        anime as ArrayList<AnimeListResponse>, true
+                    )
+                    viewPager.adapter = viewPagerAdapter
                 }
             })
         }
@@ -217,4 +241,13 @@ class HomeFragment : Fragment(){
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewPager.resumeAutoScroll()
+    }
+
+    override fun onPause() {
+        viewPager.pauseAutoScroll()
+        super.onPause()
+    }
 }
