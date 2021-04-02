@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.utils.custom.BackgroundSwitcherView
+import com.shid.mangalist.utils.custom.setTransparentStatusBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
+        setTransparentStatusBar(true)
         overlayLayout = findViewById(R.id.overlay_layout)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController

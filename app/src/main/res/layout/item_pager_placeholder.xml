@@ -17,6 +17,8 @@
             android:id="@+id/img_pager"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="#DDDDDD"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,10 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/navy_blue"
-            android:fontFamily="@font/quicksand_semibold"
-            android:text="Anime Title"
-            android:textSize="13sp"
+            android:background="#DDDDDD"
             app:layout_constraintStart_toEndOf="@+id/img_pager"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,24 +40,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/bg_score"
+            android:background="#DDDDDD"
             android:fontFamily="@font/arkhip_font"
             android:paddingHorizontal="8dp"
-            android:textColor="@color/white"
-            android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/img_pager"
-            app:layout_constraintTop_toBottomOf="@+id/pager_title"
-            tools:text="8.7" />
+            app:layout_constraintTop_toBottomOf="@+id/pager_title" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/quicksand_regular"
-            android:text="More Information..."
-            android:textColor="@color/navy_blue"
-            android:textSize="12sp"
+            android:background="#DDDDDD"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/pager_score"
             app:layout_constraintTop_toBottomOf="@+id/pager_title" />

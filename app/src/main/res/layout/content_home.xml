@@ -13,22 +13,39 @@
         android:layout_marginTop="1dp"
         app:srcCompat="@drawable/ic_menu" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="120dp"
+        >
 
         <com.asksira.loopingviewpager.LoopingViewPager
+            android:layout_marginTop="70dp"
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:clipToPadding="false"
             app:autoScroll="true"
             app:isInfinite="true"
             app:itemAspectRatio="1.33"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:scrollInterval="5000"
             app:viewpagerAspectRatio="1.78" />
-    </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/progress_view_ova"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <include layout="@layout/viewpager_loading" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/layout_top_trending"
