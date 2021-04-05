@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MangaList</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Discover</string>
     <string name="title_notifications">Notifications</string>
     <string name="more">More</string>
     <string name="top_airing">Top Airing</string>
@@ -22,4 +22,8 @@
     <string name="read_less">Read Less</string>
     <string name="search_hint">Search...</string>
     <string name="home_bottom_dialog_title">Upcoming Animes</string>
+    <string name="spring">Spring &#127793;</string>
+    <string name="summer">Summer &#127774;</string>
+    <string name="fall">Fall &#127810;</string>
+    <string name="winter">Winter &#10052;</string>
 </resources>

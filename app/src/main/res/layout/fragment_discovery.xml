@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment">
+    tools:context=".ui.discover.DiscoverFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_anime_season"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="2"
-        tools:listitem="@layout/item_anime_more" />
+        tools:listitem="@layout/item_anime_discover" />
 
     <include
         android:id="@+id/loading"
