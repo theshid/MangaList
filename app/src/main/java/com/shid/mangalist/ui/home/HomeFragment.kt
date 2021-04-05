@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -219,6 +220,7 @@ class HomeFragment : Fragment() {
     private fun showDetail(id: Int) {
         this.findNavController()
             .navigate(HomeFragmentDirections.actionHomeFragmentToDetailAnimeFragment(id))
+        //findNavController().navigate(R.id.action_homeFragment_to_detailAnimeFragment,Bundle(id))
     }
 
     private fun showMore(type: More) {
