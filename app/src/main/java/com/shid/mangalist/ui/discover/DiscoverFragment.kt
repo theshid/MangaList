@@ -9,15 +9,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
+import com.shid.mangalist.utils.custom.BaseFragment
 import com.shid.mangalist.utils.enum.Season
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.properties.Delegates
 
-class DiscoverFragment : Fragment() {
+@AndroidEntryPoint
+class DiscoverFragment : BaseFragment() {
 
     @ExperimentalPagingApi
-    private val discoverViewModel: DiscoverViewModel by viewModels<DiscoverViewModel>()
+    private val discoverViewModel: DiscoverViewModel by viewModels()
     private lateinit var adapter: DiscoverAdapter
     private var thisYear = 0
     private lateinit var loading: View
@@ -37,19 +42,20 @@ class DiscoverFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = DiscoverAdapter { id -> showDetail(id) }
+
         thisYear = Calendar.getInstance()[Calendar.YEAR]
     }
 
     private fun showDetail(id: Int) {
         this.findNavController()
-            .navigate(DiscoverFragmentDirections.actionNavigationDashboardToDetailAnimeFragment(id))
+            .navigate(DiscoverFragmentDirections.actionNavigationDiscoverToDetailAnimeFragment(id))
     }
 
     @ExperimentalPagingApi
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.season_menu, menu)
+        loading.visibility = View.VISIBLE
         discoverViewModel.setSeason(thisYear, Season.SPRING.value.toLowerCase())
         setTitleSeason(Season.SPRING)
         discoverViewModel.animeSeason.observe(viewLifecycleOwner, { anime ->
@@ -114,7 +120,11 @@ class DiscoverFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.VISIBLE
         loading = view.findViewById(R.id.loading)
         rvAnimeSeason = view.findViewById(R.id.rv_anime_season)
+        adapter = DiscoverAdapter { id -> showDetail(id) }
+        rvAnimeSeason.adapter = adapter
     }
 }

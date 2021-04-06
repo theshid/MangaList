@@ -71,12 +71,12 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_discover"
+        android:id="@+id/navigation_dashboard"
         android:name="com.shid.mangalist.ui.discover.DiscoverFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_discovery" >
         <action
-            android:id="@+id/action_navigation_dashboard_to_detailAnimeFragment"
+            android:id="@+id/action_navigation_discover_to_detailAnimeFragment"
             app:destination="@id/detailAnimeFragment"
             app:enterAnim="@anim/from_transparent"
             app:exitAnim="@anim/to_transparent"
