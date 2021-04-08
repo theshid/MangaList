@@ -14,7 +14,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.shid.mangalist.R
-import com.shid.mangalist.data.local.entities.AiringAnime
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 
 class MoreAdapter2 constructor(var activity2: Activity,private val delegate: AnimeDelegate) :

@@ -64,20 +64,8 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //onTransformationEndContainer(params)
-
-        /*val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            goToHome()
-        }
-        callback.isEnabled*/
 
 
-    }
-
-    private fun goToHome() {
-        findNavController().navigate(
-            DetailFragmentDirections.actionDetailFragmentToHomeFragment()
-        )
     }
 
     override fun onCreateView(
@@ -147,7 +135,7 @@ class DetailFragment : Fragment() {
                     val genreTextView = TextView(requireContext()).apply {
                         setBackgroundResource(R.drawable.bg_genres)
                         layoutParams = params
-                        setTextColor(Color.parseColor("#000000"))
+                        setTextColor(Color.parseColor("#FFFFFF"))
                         text = it[genre].name.toString()
                     }
                     linearLayout.addView(genreTextView)

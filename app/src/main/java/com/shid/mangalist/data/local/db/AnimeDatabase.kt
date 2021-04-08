@@ -7,18 +7,13 @@ import androidx.room.RoomDatabase
 import com.shid.mangalist.data.local.entities.*
 
 @Database(
-    entities = [AiringAnime::class, AiringRemoteKeys::class,
-        MovieAnime::class, MovieRemoteKeys::class,
-        OvaAnime::class, OvaRemoteKeys::class,
-        TvAnime::class, TvRemoteKeys::class,
-        UpcomingAnime::class, UpcomingRemoteKeys::class],
-    version = 1,
+    entities = [BookmarkAnime::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AnimeDatabase : RoomDatabase() {
 
     abstract fun animeDao(): AnimeDao
-    abstract fun animeRemoteKeysDao(): AnimeRemoteKeysDao
 
     companion object {
         @Volatile
@@ -38,8 +33,9 @@ abstract class AnimeDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                AnimeDatabase::class.java, "MovieDatabase.db"
+                AnimeDatabase::class.java, "AnimeDatabase.db"
             )
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }

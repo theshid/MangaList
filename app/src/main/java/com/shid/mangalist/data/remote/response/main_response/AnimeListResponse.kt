@@ -1,5 +1,6 @@
 package com.shid.mangalist.data.remote.response.main_response
 
+import com.shid.mangalist.data.local.entities.AnimeType
 import com.squareup.moshi.Json
 
 data class AnimeListResponse(
@@ -15,4 +16,4 @@ data class AnimeListResponse(
     val episodes: Int? = 0,
     @Json(name = "score")
     val score: Double? = 0.0
-)
+):AnimeType

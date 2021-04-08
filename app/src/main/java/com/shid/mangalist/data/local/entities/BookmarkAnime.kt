@@ -5,9 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "airing_anime")
+@Entity(tableName = "bookmark_anime")
 @Parcelize
-data class AiringAnime(
+data class BookmarkAnime(
     @PrimaryKey
     val id: Int? = 0,
     val title: String? = "",
@@ -15,4 +15,4 @@ data class AiringAnime(
     val type: String? = "",
     val episodes: Int? = 0,
     val score: Double? = 0.0
-):AnimeType, Parcelable
+): Parcelable,AnimeType

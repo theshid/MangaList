@@ -1,63 +1,23 @@
 package com.shid.mangalist.data.local.db
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.shid.mangalist.data.local.entities.*
 
 @Dao
 interface AnimeDao {
 
-    //Airing Anime
+    //Insert Bookmark Animes
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAiringAnimes(animeResponse: List<AiringAnime>)
+    suspend fun insertBookmarkAnimes(anime:BookmarkAnime)
 
-    @Query("select * from airing_anime")
-    fun getAiringAnimes(): PagingSource<Int, AiringAnime>
+    //Get all bookmark animes
+    @Query("SELECT * FROM bookmark_anime")
+    fun getBookmarkAnimes():List<BookmarkAnime>
 
-    @Query("DELETE FROM airing_anime")
-    suspend fun clearAiringAnimes()
-
-    //Movie Anime
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMoviesAnime(animeResponse: List<MovieAnime>)
-
-    @Query("select * from movie_anime")
-    fun getMovies(): PagingSource<Int, MovieAnime>
-
-    @Query("DELETE FROM movie_anime")
-    suspend fun clearMovies()
-
-    //Ova Anime
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOvaAnimes(animeResponse: List<OvaAnime>)
-
-    @Query("select * from ova_anime")
-    fun getOvaAnimes(): PagingSource<Int, OvaAnime>
-
-    @Query("DELETE FROM ova_anime")
-    suspend fun clearOvaAnimes()
+    //Delete bookmark anime
+    @Delete
+    fun unBookmarkAnime(anime:BookmarkAnime)
 
 
-    //Tv Animes
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTvAnimes(animeResponse: List<TvAnime>)
-
-    @Query("select * from tv_anime")
-    fun getTvAnimes(): PagingSource<Int, TvAnime>
-
-    @Query("DELETE FROM tv_anime")
-    suspend fun clearTvAnimes()
-
-    //Upcoming Animes
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpcomingAnimes(animeResponse: List<UpcomingAnime>)
-
-    @Query("select * from upcoming_anime")
-    fun getUpcomingAnimes(): PagingSource<Int, UpcomingAnime>
-
-    @Query("DELETE FROM upcoming_anime")
-    suspend fun clearUpcomingAnimes()
 }
