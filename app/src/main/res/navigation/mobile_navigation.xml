@@ -24,6 +24,13 @@
             app:exitAnim="@anim/to_transparent"
             app:popEnterAnim="@anim/from_transparent"
             app:popExitAnim="@anim/to_transparent" />
+        <action
+            android:id="@+id/action_navigation_home_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent"/>
     </fragment>
 
     <fragment
@@ -89,4 +96,17 @@
         android:name="com.shid.mangalist.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.shid.mangalist.ui.search.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent"/>
+    </fragment>
 </navigation>

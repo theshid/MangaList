@@ -37,6 +37,7 @@ class DiscoverFragment : BaseFragment() {
         val root = inflater.inflate(R.layout.fragment_discovery, container, false)
         initViews(root)
         setHasOptionsMenu(true)
+
         return root
     }
 

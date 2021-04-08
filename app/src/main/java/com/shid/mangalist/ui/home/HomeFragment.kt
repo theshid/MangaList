@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
     private lateinit var movieRecyclerView: RecyclerView
 
 
-    private lateinit var titleAiring :TextView
+    private lateinit var titleAiring: TextView
     private lateinit var txt_moreAiring: TextView
     private lateinit var layoutBottomSheet: View
     private lateinit var viewPager: LoopingViewPager
@@ -79,6 +79,8 @@ class HomeFragment : Fragment() {
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
     private lateinit var progressViewAiring: ShimmerFrameLayout
     private lateinit var progressViewOva: ShimmerFrameLayout
+
+    private lateinit var searchBox: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,7 +156,7 @@ class HomeFragment : Fragment() {
         val linearLayoutManager4 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager4.orientation = LinearLayoutManager.HORIZONTAL
 
-
+        searchBox = view.findViewById(R.id.searchText)
 
         airingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_airing)
         airingRecyclerView.layoutManager = linearLayoutManager
@@ -188,6 +190,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun clickListeners() {
+        searchBox.setOnClickListener(View.OnClickListener {
+            goToSearch()
+        })
         txt_moreAiring.setOnClickListener(View.OnClickListener {
             showMore(More.AIRING)
         })
@@ -215,6 +220,10 @@ class HomeFragment : Fragment() {
         imgTrending3.setOnClickListener(View.OnClickListener {
             img_id2?.let { it1 -> showDetail(it1) }
         })
+    }
+
+    private fun goToSearch() {
+        findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToSearchFragment())
     }
 
     private fun showDetail(id: Int) {
