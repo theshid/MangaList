@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skydoves.transformationlayout.TransformationLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     app:transformation_duration="550"
-    android:id="@+id/transformationLayout"
+    android:foreground="?attr/selectableItemBackground"
     android:layout_height="wrap_content"
     android:layout_marginEnd="10dp"
     android:orientation="vertical"
+    app:cardCornerRadius="20dp"
+
     >
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="40dp"
-        app:cardElevation="20dp"
-        app:cardMaxElevation="20dp"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                app:cardElevation="20dp"
+                app:cardMaxElevation="20dp">
 
                 <ImageView
                     android:id="@+id/poster_image"
@@ -78,5 +67,4 @@
             </LinearLayout>
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</com.skydoves.transformationlayout.TransformationLayout>
+

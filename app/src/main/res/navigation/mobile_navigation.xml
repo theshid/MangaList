@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.shid.mangalist.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_moreFragment"
             app:destination="@id/moreFragment"
@@ -24,13 +24,20 @@
             app:exitAnim="@anim/to_transparent"
             app:popEnterAnim="@anim/from_transparent"
             app:popExitAnim="@anim/to_transparent" />
+        <action
+            android:id="@+id/action_navigation_home_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent"/>
     </fragment>
 
     <fragment
         android:id="@+id/moreFragment"
         android:name="com.shid.mangalist.ui.more.MoreFragment"
         android:label="@string/more"
-        tools:layout="@layout/more_fragment2" >
+        tools:layout="@layout/more_fragment2">
         <argument
             android:name="type"
             app:argType="com.shid.mangalist.utils.enum.More" />
@@ -54,30 +61,60 @@
         android:id="@+id/detailAnimeFragment"
         android:name="com.shid.mangalist.ui.detail.DetailFragment"
         android:label="@string/detail"
-        tools:layout="@layout/detail_fragment" >
+        tools:layout="@layout/detail_fragment">
         <argument
             android:name="anime"
-            app:argType="integer" />
+            app:argType="integer"
+            />
         <action
             android:id="@+id/action_detailFragment_to_homeFragment"
             app:destination="@id/navigation_home"
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/navigation_home"
             app:popEnterAnim="@anim/from_right"
-            app:popExitAnim="@anim/to_left" />
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.shid.mangalist.ui.dashboard.DashboardFragment"
+        android:name="com.shid.mangalist.ui.discover.DiscoverFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_discovery" >
+        <action
+            android:id="@+id/action_navigation_discover_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.shid.mangalist.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.shid.mangalist.ui.favorites.BookmarksFragment"
+        android:label="Bookmarks"
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_bookmarkFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent"/>
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.shid.mangalist.ui.search.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent"/>
+    </fragment>
 </navigation>

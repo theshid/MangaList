@@ -16,12 +16,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.like.LikeButton
+import com.like.OnLikeListener
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.*
@@ -39,7 +42,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 class DetailFragment : Fragment() {
     lateinit var rootView: ScrollView
     lateinit var trans_imageView: ImageView
-    val detailViewModel: DetailViewModel by viewModels()
+    private val detailViewModel: DetailViewModel by viewModels()
     private lateinit var rv_characters: RecyclerView
     private lateinit var rv_video: RecyclerView
     private lateinit var linearLayout: LinearLayout
@@ -48,7 +51,7 @@ class DetailFragment : Fragment() {
     private lateinit var animeTitle: AppCompatTextView
     private lateinit var animeSummary: AppCompatTextView
     private var anime_id: Int? = null
-    private var image_url:String ?= null
+    private var image_url: String? = null
     private lateinit var backgroundImg: ImageView
     private var _binding: DetailFragmentBinding? = null
     private val binding get() = _binding!!
@@ -56,34 +59,13 @@ class DetailFragment : Fragment() {
     companion object {
         fun newInstance() = DetailFragment()
         const val TAG = "LibraryFragment"
-        const val posterKey = "posterKey"
-        const val posterKey2 = "posterKey"
-        const val posterKey3 = "posterKey"
-        const val posterKey4 = "posterKey"
-        const val posterKey5 = "posterKey"
-        const val paramsKey = "paramsKey"
-    }
 
-    private lateinit var viewModel: DetailViewModel
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val params = arguments?.getParcelable<TransformationLayout.Params>(paramsKey)
-        onTransformationEndContainer(params)
 
-        /*val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            goToHome()
-        }
-        callback.isEnabled*/
-
-
-    }
-
-    private fun goToHome() {
-        findNavController().navigate(
-            DetailFragmentDirections.actionDetailFragmentToHomeFragment()
-        )
     }
 
     override fun onCreateView(
@@ -92,17 +74,13 @@ class DetailFragment : Fragment() {
     ): View? {
         _binding = DetailFragmentBinding.inflate(inflater, container, false)
 
+
         val view: View = binding.root
         rootView = view.findViewById(R.id.root_detail)
-
-        //val jsonFromActivity = DetailFragmentArgs.fromBundle(requireArguments()).anime
-        /*val animeObject =
-            GsonParser.getGsonParser()?.fromJson<AiringAnime>(jsonFromActivity,AiringAnime::class.java)*/
         setUi(view)
-        anime_id = arguments?.getInt("key")
-        image_url = arguments?.getString("key2")
 
-        trans_imageView.load(image_url)
+
+        //trans_imageView.load(image_url)
 
         val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
         bottomNav.visibility = View.GONE
@@ -112,6 +90,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun setUi(view: View) {
+
         trans_imageView = view.findViewById(R.id.poster_image)
         backgroundImg = view.findViewById(R.id.transformation_image)
         rv_characters = view.findViewById(R.id.cast_list)
@@ -122,30 +101,45 @@ class DetailFragment : Fragment() {
         binding.expandButton.setOnClickListener(View.OnClickListener {
             handleExpandAction(view)
         })
+        binding.starButton.setOnLikeListener(object: OnLikeListener{
+            override fun liked(likeButton: LikeButton?) {
+                detailViewModel.anime.value?.let { detailViewModel.setFavorite(it) }
+            }
+
+            override fun unLiked(likeButton: LikeButton?) {
+                detailViewModel.anime.value?.let { detailViewModel.unSetFavorite(it) }
+            }
+
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // val poster = arguments?.getParcelable<AiringAnime>(posterKey)
+        // val poster = arguments?.getParcelable<AiringAnime>(posterKey)
 
+        val animeId = DetailFragmentArgs.fromBundle(requireArguments()).anime
+        detailViewModel.checkIfAnimeIsFavorite(animeId)
+        detailViewModel.setDetailAnime(animeId)
+        detailViewModel.isAnimeInDb.observe(viewLifecycleOwner, Observer {
+            if (it == 1){
+                binding.starButton.isLiked = true
+            }
+        })
 
 
         videoAdapter = VideoAdapter { url -> showVideo(url) }
         characterAdapter = CharacterAdapter()
-
-
-
-
-
         anime_id?.let { detailViewModel.setDetailAnime(it) }
         detailViewModel.anime.observe(viewLifecycleOwner, Observer {
-            rootView.transitionName = it.title
-            //trans_imageView.load(it.imageUrl)
+
+            trans_imageView.load(it.imageUrl)
             anime_id = it.id
             Glide.with(backgroundImg.context).load(it.imageUrl)
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
                 .into(backgroundImg)
 
+            _binding?.txtScore?.text  = it.score.toString()
+            _binding?.rank?.text = it.popularity.toString()
             animeTitle.text = it.title
             animeSummary.text = it.synopsis
             it.genres.let {
@@ -158,7 +152,7 @@ class DetailFragment : Fragment() {
                     val genreTextView = TextView(requireContext()).apply {
                         setBackgroundResource(R.drawable.bg_genres)
                         layoutParams = params
-                        setTextColor(Color.parseColor("#000000"))
+                        setTextColor(Color.parseColor("#FFFFFF"))
                         text = it[genre].name.toString()
                     }
                     linearLayout.addView(genreTextView)
@@ -183,6 +177,7 @@ class DetailFragment : Fragment() {
         })
 
 
+
     }
 
     private fun updateCharacterDetails(list: List<CharactersListResponse>?) {
@@ -196,10 +191,6 @@ class DetailFragment : Fragment() {
         characterAdapter2.setData(list)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
 
     private fun showVideo(url: String?) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -211,7 +202,7 @@ class DetailFragment : Fragment() {
         }
     }
 
-    fun handleExpandAction(view: View) {
+    private fun handleExpandAction(view: View) {
 
         if (binding.includedLayout.expandableLayout.isExpanded()) {
             binding.expandButton.text = getString(R.string.read_more)

@@ -81,9 +81,9 @@ public class PagerSnapHelper extends LinearSnapHelper {
         int targetPosition = -1;
         if (layoutManager.canScrollHorizontally()) {
             if (velocityX > 0) {
-                targetPosition = position - 1;
-            } else {
                 targetPosition = position + 1;
+            } else {
+                targetPosition = position - 1;
             }
         }
 

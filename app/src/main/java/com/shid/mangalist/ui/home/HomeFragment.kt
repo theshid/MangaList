@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,25 +14,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.asksira.loopingviewpager.LoopingPagerAdapter
+import com.asksira.loopingviewpager.LoopingViewPager
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
-import com.shid.mangalist.data.local.entities.*
-import com.shid.mangalist.ui.detail.DetailFragment
-import com.shid.mangalist.utils.GsonParser
-import com.shid.mangalist.utils.custom.RecyclerItemClickListener
+import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.utils.enum.More
-import com.skydoves.transformationlayout.TransformationLayout
-import com.skydoves.transformationlayout.addTransformation
-import com.skydoves.transformationlayout.onTransformationStartContainer
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
 
     @ExperimentalPagingApi
     private val homeViewModel: HomeViewModel by viewModels()
@@ -40,24 +38,41 @@ class HomeFragment : Fragment(){
     private lateinit var topUpcomingAdapter: HomeAdapter
     private lateinit var topTvAdapter: HomeAdapter
     private lateinit var topMovieAdapter: HomeAdapter
-    private lateinit var topOvaAdapter: HomeAdapter
+
 
     private lateinit var airingRecyclerView: RecyclerView
     private lateinit var upcomingRecyclerView: RecyclerView
     private lateinit var tvRecyclerView: RecyclerView
     private lateinit var movieRecyclerView: RecyclerView
-    private lateinit var ovaRecyclerView: RecyclerView
 
+
+    private lateinit var titleAiring: TextView
     private lateinit var txt_moreAiring: TextView
-    private lateinit var txt_moreUpcoming: TextView
-    private lateinit var txt_moreTv: TextView
-    private lateinit var txt_moreMovie: TextView
-    private lateinit var txt_moreOva: TextView
+    private lateinit var layoutBottomSheet: View
+    private lateinit var viewPager: LoopingViewPager
+    private lateinit var viewPagerAdapter: LoopingPagerAdapter<AnimeListResponse>
+
+    private lateinit var imgTrending: ImageView
+    private lateinit var imgTrending2: ImageView
+    private lateinit var imgTrending3: ImageView
+    private var img_id: Int? = null
+    private var img_id1: Int? = null
+    private var img_id2: Int? = null
+
+    private lateinit var layout_upcoming: LinearLayout
+    private lateinit var layout_movie: LinearLayout
+    private lateinit var layout_tv: LinearLayout
+
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private lateinit var progressViewAiring: ShimmerFrameLayout
+    private lateinit var progressViewOva: ShimmerFrameLayout
+
+    private lateinit var searchBox: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onTransformationStartContainer()
+
     }
 
     @ExperimentalPagingApi
@@ -69,47 +84,23 @@ class HomeFragment : Fragment(){
 
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         configureViews(root)
+        setBottomHomeFragment()
+        setVisibility()
         fetchTopAnimes()
+
         clickListeners()
 
 
         return root
     }
 
-    companion object {
-        lateinit var typeAnime: String
-    }
+    private fun setVisibility() {
+        txt_moreAiring.visibility = View.GONE
+        titleAiring.visibility = View.GONE
 
-    private fun clickListeners() {
-        txt_moreAiring.setOnClickListener(View.OnClickListener {
-            showMore(More.AIRING)
-        })
+        progressViewOva.visibility = View.VISIBLE
+        progressViewAiring.visibility = View.VISIBLE
 
-        txt_moreUpcoming.setOnClickListener(View.OnClickListener {
-            showMore(More.UPCOMING)
-        })
-
-        txt_moreTv.setOnClickListener(View.OnClickListener {
-            showMore(More.TV)
-        })
-
-        txt_moreMovie.setOnClickListener(View.OnClickListener {
-            showMore(More.MOVIE)
-        })
-
-        txt_moreOva.setOnClickListener(View.OnClickListener {
-            showMore(More.OVA)
-        })
-    }
-
-    private fun showDetail(id: Int) {
-        this.findNavController()
-            .navigate(HomeFragmentDirections.actionHomeFragmentToDetailAnimeFragment(id))
-    }
-
-    private fun showMore(type: More) {
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToMoreFragment(type))
-        typeAnime = type.type
     }
 
     private fun configureViews(view: View) {
@@ -117,38 +108,42 @@ class HomeFragment : Fragment(){
         bottomNav.visibility = View.VISIBLE
         (activity as MainActivity).clearBackground()
         txt_moreAiring = view.findViewById(R.id.more_airing)
-        txt_moreUpcoming = view.findViewById(R.id.more_upcoming)
-        txt_moreTv = view.findViewById(R.id.more_tv)
-        txt_moreMovie = view.findViewById(R.id.more_movie)
-        txt_moreOva = view.findViewById(R.id.more_ova)
+        titleAiring = view.findViewById(R.id.top_airing_text)
+
+        progressViewAiring = view.findViewById(R.id.progress_view_airing)
+        progressViewOva = view.findViewById(R.id.progress_view_ova)
+
+        imgTrending = view.findViewById(R.id.img_trending)
+        imgTrending2 = view.findViewById(R.id.img_trending2)
+        imgTrending3 = view.findViewById(R.id.img_trending3)
+
+        layoutBottomSheet = view.findViewById(R.id.layoutBottomSheet)
+        viewPager = view.findViewById(R.id.viewpager)
+
+        layout_movie = view.findViewById(R.id.layout_top_movie)
+        layout_upcoming = view.findViewById(R.id.layout_top_upcoming)
+        layout_tv = view.findViewById(R.id.layout_top_tv)
 
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager.reverseLayout = true
-        linearLayoutManager.stackFromEnd = true
+
 
         val linearLayoutManager1 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager1.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager1.reverseLayout = true
-        linearLayoutManager1.stackFromEnd = true
+
 
         val linearLayoutManager2 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager2.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager2.reverseLayout = true
-        linearLayoutManager2.stackFromEnd = true
 
 
         val linearLayoutManager3 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager3.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager3.reverseLayout = true
-        linearLayoutManager3.stackFromEnd = true
 
 
         val linearLayoutManager4 = ZoomRecyclerLayout(requireContext())
         linearLayoutManager4.orientation = LinearLayoutManager.HORIZONTAL
-        linearLayoutManager4.reverseLayout = true
-        linearLayoutManager4.stackFromEnd = true
 
+        searchBox = view.findViewById(R.id.searchText)
 
         airingRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_airing)
         airingRecyclerView.layoutManager = linearLayoutManager
@@ -165,30 +160,113 @@ class HomeFragment : Fragment(){
         topTvAdapter = HomeAdapter { id -> showDetail(id) }
         tvRecyclerView.adapter = topTvAdapter
 
-        movieRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_movie)
+        movieRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_movie2)
         movieRecyclerView.layoutManager = linearLayoutManager3
         topMovieAdapter = HomeAdapter { id -> showDetail(id) }
         movieRecyclerView.adapter = topMovieAdapter
 
-        ovaRecyclerView = view.findViewById<RecyclerView>(R.id.rv_top_ova)
-        ovaRecyclerView.layoutManager = linearLayoutManager4
-        topOvaAdapter = HomeAdapter { id -> showDetail(id) }
-        ovaRecyclerView.adapter = topOvaAdapter
     }
+
+
+
+    companion object {
+        lateinit var typeAnime: String
+    }
+
+    private fun setBottomHomeFragment() {
+
+        bottomSheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
+        bottomSheetBehavior!!.addBottomSheetCallback(object :BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                var layoutParams = layoutBottomSheet.layoutParams as ViewGroup.MarginLayoutParams
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                    layoutParams.setMargins(0, 0, 0, 0); // remove top margin
+                else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    layoutParams.setMargins(0, 80, 0, 0); // add top margin
+
+                    bottomSheet.layoutParams = layoutParams;
+                }
+            }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+                }
+
+            })
+    }
+
+    private fun clickListeners() {
+        searchBox.setOnClickListener(View.OnClickListener {
+            goToSearch()
+        })
+        txt_moreAiring.setOnClickListener(View.OnClickListener {
+            showMore(More.AIRING)
+        })
+
+        layout_upcoming.setOnClickListener(View.OnClickListener {
+            showMore(More.UPCOMING)
+        })
+
+        layout_movie.setOnClickListener(View.OnClickListener {
+            showMore(More.MOVIE)
+        })
+
+        layout_tv.setOnClickListener(View.OnClickListener {
+            showMore(More.TV)
+        })
+
+        imgTrending.setOnClickListener(View.OnClickListener {
+            img_id?.let { it1 -> showDetail(it1) }
+        })
+
+        imgTrending2.setOnClickListener(View.OnClickListener {
+            img_id1?.let { it1 -> showDetail(it1) }
+        })
+
+        imgTrending3.setOnClickListener(View.OnClickListener {
+            img_id2?.let { it1 -> showDetail(it1) }
+        })
+    }
+
+    private fun goToSearch() {
+        findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToSearchFragment())
+    }
+
+    private fun showDetail(id: Int) {
+        this.findNavController()
+            .navigate(HomeFragmentDirections.actionHomeFragmentToDetailAnimeFragment(id))
+        //findNavController().navigate(R.id.action_homeFragment_to_detailAnimeFragment,Bundle(id))
+    }
+
+    private fun showMore(type: More) {
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToMoreFragment(type))
+        typeAnime = type.type
+    }
+
 
     @ExperimentalPagingApi
     private fun fetchTopAnimes() {
         lifecycleScope.launch {
-            homeViewModel.animeAiring.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeAiring.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topAiringAdapter.setData(anime)
+                    txt_moreAiring.visibility = View.VISIBLE
+                    titleAiring.visibility = View.VISIBLE
+                    progressViewAiring.visibility = View.GONE
+                    imgTrending.load(anime[0].imageUrl)
+                    imgTrending2.load(anime[1].imageUrl)
+                    imgTrending3.load(anime[2].imageUrl)
+                    img_id = anime[0].id
+                    img_id1 = anime[1].id
+                    img_id2 = anime[2].id
+
                 }
             })
 
 
         }
         lifecycleScope.launch {
-            homeViewModel.animeUpcoming.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeUpcoming.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
                     topUpcomingAdapter.setData(anime)
                 }
@@ -196,30 +274,47 @@ class HomeFragment : Fragment(){
         }
 
         lifecycleScope.launch {
-            homeViewModel.animeMovie.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeMovie.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
-                    topUpcomingAdapter.setData(anime)
+                    topMovieAdapter.setData(anime)
                 }
             })
         }
 
         lifecycleScope.launch {
-            homeViewModel.animeTV.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeTV.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
-                    topUpcomingAdapter.setData(anime)
+                    topTvAdapter.setData(anime)
                 }
             })
         }
 
         lifecycleScope.launch {
-            homeViewModel.animeOva.observe(viewLifecycleOwner,{ anime ->
+            homeViewModel.animeOva.observe(viewLifecycleOwner, { anime ->
                 if (anime.isNotEmpty()) {
-                    topUpcomingAdapter.setData(anime)
+                    //topOvaAdapter.setData(anime)
+                    viewPagerAdapter = LoopAnimeAdapter(
+                        requireContext(),
+                        anime as ArrayList<AnimeListResponse>, true
+                    ) { id -> showDetail(id) }
+                    viewPager.adapter = viewPagerAdapter
+                    progressViewOva.visibility = View.GONE
                 }
             })
         }
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewPager.resumeAutoScroll()
+
+    }
+
+    override fun onPause() {
+        viewPager.pauseAutoScroll()
+        super.onPause()
     }
 
 }

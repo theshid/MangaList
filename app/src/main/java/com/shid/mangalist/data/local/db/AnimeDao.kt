@@ -1,63 +1,34 @@
 package com.shid.mangalist.data.local.db
 
-import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.shid.mangalist.data.local.entities.*
+import androidx.room.*
+import com.shid.mangalist.data.local.entities.BookmarkAnime
 
 @Dao
 interface AnimeDao {
 
-    //Airing Anime
+    //Insert Bookmark Animes
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAiringAnimes(animeResponse: List<AiringAnime>)
+    fun insertBookmarkAnimes(anime: BookmarkAnime)
 
-    @Query("select * from airing_anime")
-    fun getAiringAnimes(): PagingSource<Int, AiringAnime>
+    //Get all bookmark animes
+    @Query("SELECT * FROM bookmark_anime")
+    fun getBookmarkAnimes():List<BookmarkAnime>
 
-    @Query("DELETE FROM airing_anime")
-    suspend fun clearAiringAnimes()
+    /*//Search for Anime that is bookmarked
+    @Query("SELECT * FROM bookmark_anime where anime_id IN (:animeId)")
+    fun checkAnimeBookmark(animeId: Int):BookmarkAnime*/
 
-    //Movie Anime
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMoviesAnime(animeResponse: List<MovieAnime>)
-
-    @Query("select * from movie_anime")
-    fun getMovies(): PagingSource<Int, MovieAnime>
-
-    @Query("DELETE FROM movie_anime")
-    suspend fun clearMovies()
-
-    //Ova Anime
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOvaAnimes(animeResponse: List<OvaAnime>)
-
-    @Query("select * from ova_anime")
-    fun getOvaAnimes(): PagingSource<Int, OvaAnime>
-
-    @Query("DELETE FROM ova_anime")
-    suspend fun clearOvaAnimes()
+    @Query("SELECT EXISTS (SELECT 1 FROM bookmark_anime WHERE anime_id IN (:id))")
+    fun exists(id: Int): Int
 
 
-    //Tv Animes
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTvAnimes(animeResponse: List<TvAnime>)
+    /*//Update favorite status of anime
+    @Query("UPDATE bookmark_anime SET favorite = NOT favorite WHERE anime_id IN (:animeId)")
+    fun updateFavorite(animeId: Int)*/
 
-    @Query("select * from tv_anime")
-    fun getTvAnimes(): PagingSource<Int, TvAnime>
+    //Delete bookmark anime
+    @Delete
+    fun unBookmarkAnime(anime: BookmarkAnime)
 
-    @Query("DELETE FROM tv_anime")
-    suspend fun clearTvAnimes()
 
-    //Upcoming Animes
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUpcomingAnimes(animeResponse: List<UpcomingAnime>)
-
-    @Query("select * from upcoming_anime")
-    fun getUpcomingAnimes(): PagingSource<Int, UpcomingAnime>
-
-    @Query("DELETE FROM upcoming_anime")
-    suspend fun clearUpcomingAnimes()
 }

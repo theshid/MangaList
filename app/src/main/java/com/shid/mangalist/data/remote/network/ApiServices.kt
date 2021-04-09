@@ -15,6 +15,9 @@ interface ApiServices {
     @GET("top/anime/1/{type}")
     suspend fun getTopAnime(@Path("type") type: String): TopAnimeResponse
 
+    @GET("top/anime/{page}/{type}")
+    suspend fun getTopAnimePaging(@Path("type") type: String,@Path("page") page:Int): TopAnimeResponse
+
     @GET("top/anime/1/{type}")
     suspend fun getTop(@Path("type") type: String): TopAnimeResponse
 

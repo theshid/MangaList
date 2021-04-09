@@ -10,8 +10,13 @@ import android.util.DisplayMetrics;
 import android.view.animation.Animation;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class BackgroundSwitcherView extends ImageSwitcher {
     private final int[] NORMAL_ORDER = new int[]{0, 1};
@@ -120,7 +125,10 @@ public class BackgroundSwitcherView extends ImageSwitcher {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                image.setImageBitmap(bitmap);
+                //image.setImageBitmap(bitmap);
+                Glide.with(image.getContext()).load(bitmap)
+                        .apply(RequestOptions.bitmapTransform(new BlurTransformation(5, 3)))
+                        .into(image);
                 new Handler().postDelayed(() -> animate().alpha(0.4f).setDuration(duration), 200);
             }
 

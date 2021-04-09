@@ -56,11 +56,11 @@ class HomeAdapter(private val showDetail: (id: Int) -> Unit) :
             image.load(animeListResponse.imageUrl)
 
             itemView.apply {
-                rootView.setOnClickListener(View.OnClickListener {
+                rootView.setOnClickListener {
                     animeListResponse.id?.let { it1 ->
                         showDetail(it1)
                     }
-                })
+                }
 
             }
         }
