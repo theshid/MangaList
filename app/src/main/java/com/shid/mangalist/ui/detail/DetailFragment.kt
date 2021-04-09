@@ -9,32 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.irozon.sneaker.Sneaker
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
-import com.shid.mangalist.data.local.entities.*
 import com.shid.mangalist.data.remote.response.detail.CharactersListResponse
 import com.shid.mangalist.databinding.DetailFragmentBinding
-import com.shid.mangalist.ui.more.MoreFragmentArgs
-import com.shid.mangalist.ui.more.MoreFragmentDirections
-import com.shid.mangalist.utils.GsonParser
-import com.skydoves.transformationlayout.TransformationLayout
-import com.skydoves.transformationlayout.onTransformationEndContainer
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.glide.transformations.BlurTransformation
 
@@ -104,10 +95,18 @@ class DetailFragment : Fragment() {
         binding.starButton.setOnLikeListener(object: OnLikeListener{
             override fun liked(likeButton: LikeButton?) {
                 detailViewModel.anime.value?.let { detailViewModel.setFavorite(it) }
+                Sneaker.with(requireActivity()) // Activity, Fragment or ViewGroup
+                    .setTitle("Success!!")
+                    .setMessage("Anime added to Bookmarks!")
+                    .sneakSuccess()
             }
 
             override fun unLiked(likeButton: LikeButton?) {
                 detailViewModel.anime.value?.let { detailViewModel.unSetFavorite(it) }
+                Sneaker.with(requireActivity()) // Activity, Fragment or ViewGroup
+                    .setTitle("Success!!")
+                    .setMessage("Anime removed from Bookmarks!")
+                    .sneakSuccess()
             }
 
         })

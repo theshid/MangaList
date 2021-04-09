@@ -92,14 +92,8 @@ dependencies {
     //Circle ImageView
     implementation "de.hdodenhof:circleimageview:3.1.0"
 
-    //Lottie
-    implementation "com.airbnb.android:lottie:3.4.2"
-
     //Okhttp
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
-
-    //Coil
-    implementation("io.coil-kt:coil:1.1.0")
 
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
@@ -107,8 +101,7 @@ dependencies {
 
     implementation 'com.github.Spikeysanju:ZoomRecylerLayout:1.0'
 
-    //Transformation layout
-    implementation "com.github.skydoves:transformationlayout:1.0.7"
+    implementation("io.coil-kt:coil:1.1.1")
 
     implementation 'com.robertlevonyan.view:MaterialChipView:2.1.7'
     implementation 'com.android.support:support-annotations:28.0.0'
@@ -123,14 +116,9 @@ dependencies {
 
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
-    debugImplementation 'com.facebook.flipper:flipper:0.84.0'
-    debugImplementation 'com.facebook.soloader:soloader:0.10.1'
-
-    releaseImplementation 'com.facebook.flipper:flipper-noop:0.84.0'
-
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
-    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.irozon.sneaker:sneaker:2.0.0'
 
 
 

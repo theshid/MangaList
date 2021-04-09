@@ -47,7 +47,12 @@ class DiscoverAdapter (private val showDetail: (id: Int) -> Unit) :
         private val title: TextView = itemView.findViewById(R.id.title)
         private val image: ImageView = itemView.findViewById(R.id.img_discover)
         fun bind(animeListResponse: AnimeListResponse) {
-            score.text = animeListResponse.score.toString()
+            if (animeListResponse.score.toString() == "null"){
+                score.text = "N/A"
+            } else{
+                score.text = animeListResponse.score.toString()
+            }
+
             title.text = animeListResponse.title
             image.load(animeListResponse.imageUrl)
 

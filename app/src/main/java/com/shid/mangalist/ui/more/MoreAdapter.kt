@@ -70,7 +70,12 @@ class MoreAdapter (private val activity2:Activity,private val showDetail: (id: I
         fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
             title.text = anime.title
-            score.text = anime.score.toString()
+            if (anime.score.toString() == "0.0" || anime.score.toString() == "null"){
+                score.text = "N/A"
+            } else{
+                score.text = anime.score.toString()
+            }
+
             itemView.apply {
                 rootView.setOnClickListener(View.OnClickListener {
                   anime.id?.let { it -> showDetail(it) }
