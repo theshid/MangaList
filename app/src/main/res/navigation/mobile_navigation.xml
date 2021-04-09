@@ -93,9 +93,17 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.shid.mangalist.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:name="com.shid.mangalist.ui.favorites.BookmarksFragment"
+        android:label="Bookmarks"
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_bookmarkFragment_to_detailAnimeFragment"
+            app:destination="@id/detailAnimeFragment"
+            app:enterAnim="@anim/from_transparent"
+            app:exitAnim="@anim/to_transparent"
+            app:popEnterAnim="@anim/from_transparent"
+            app:popExitAnim="@anim/to_transparent"/>
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.shid.mangalist.ui.search.SearchFragment"

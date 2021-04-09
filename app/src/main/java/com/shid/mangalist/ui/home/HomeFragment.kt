@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,22 +20,11 @@ import com.asksira.loopingviewpager.LoopingViewPager
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.card.MaterialCardView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
-import com.shid.mangalist.data.local.entities.*
-import com.shid.mangalist.data.remote.AnimePagingSource
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
-import com.shid.mangalist.ui.detail.DetailFragment
-import com.shid.mangalist.utils.GsonParser
-import com.shid.mangalist.utils.custom.RecyclerItemClickListener
 import com.shid.mangalist.utils.enum.More
-import com.skydoves.transformationlayout.TransformationLayout
-import com.skydoves.transformationlayout.addTransformation
-import com.skydoves.transformationlayout.onTransformationStartContainer
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
@@ -180,6 +167,8 @@ class HomeFragment : Fragment() {
 
     }
 
+
+
     companion object {
         lateinit var typeAnime: String
     }
@@ -187,6 +176,23 @@ class HomeFragment : Fragment() {
     private fun setBottomHomeFragment() {
 
         bottomSheetBehavior = BottomSheetBehavior.from(layoutBottomSheet)
+        bottomSheetBehavior!!.addBottomSheetCallback(object :BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                var layoutParams = layoutBottomSheet.layoutParams as ViewGroup.MarginLayoutParams
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                    layoutParams.setMargins(0, 0, 0, 0); // remove top margin
+                else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    layoutParams.setMargins(0, 80, 0, 0); // add top margin
+
+                    bottomSheet.layoutParams = layoutParams;
+                }
+            }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+                }
+
+            })
     }
 
     private fun clickListeners() {
@@ -303,10 +309,12 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewPager.resumeAutoScroll()
+
     }
 
     override fun onPause() {
         viewPager.pauseAutoScroll()
         super.onPause()
     }
+
 }

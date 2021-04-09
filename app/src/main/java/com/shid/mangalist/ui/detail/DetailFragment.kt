@@ -23,6 +23,8 @@ import coil.load
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.like.LikeButton
+import com.like.OnLikeListener
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.*
@@ -64,8 +66,6 @@ class DetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
     }
 
     override fun onCreateView(
@@ -74,12 +74,9 @@ class DetailFragment : Fragment() {
     ): View? {
         _binding = DetailFragmentBinding.inflate(inflater, container, false)
 
+
         val view: View = binding.root
         rootView = view.findViewById(R.id.root_detail)
-
-        //val jsonFromActivity = DetailFragmentArgs.fromBundle(requireArguments()).anime
-        /*val animeObject =
-            GsonParser.getGsonParser()?.fromJson<AiringAnime>(jsonFromActivity,AiringAnime::class.java)*/
         setUi(view)
 
 
@@ -93,6 +90,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun setUi(view: View) {
+
         trans_imageView = view.findViewById(R.id.poster_image)
         backgroundImg = view.findViewById(R.id.transformation_image)
         rv_characters = view.findViewById(R.id.cast_list)
@@ -103,15 +101,32 @@ class DetailFragment : Fragment() {
         binding.expandButton.setOnClickListener(View.OnClickListener {
             handleExpandAction(view)
         })
+        binding.starButton.setOnLikeListener(object: OnLikeListener{
+            override fun liked(likeButton: LikeButton?) {
+                detailViewModel.anime.value?.let { detailViewModel.setFavorite(it) }
+            }
+
+            override fun unLiked(likeButton: LikeButton?) {
+                detailViewModel.anime.value?.let { detailViewModel.unSetFavorite(it) }
+            }
+
+        })
     }
-    val args:DetailFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // val poster = arguments?.getParcelable<AiringAnime>(posterKey)
 
         val animeId = DetailFragmentArgs.fromBundle(requireArguments()).anime
+        detailViewModel.checkIfAnimeIsFavorite(animeId)
         detailViewModel.setDetailAnime(animeId)
+        detailViewModel.isAnimeInDb.observe(viewLifecycleOwner, Observer {
+            if (it == 1){
+                binding.starButton.isLiked = true
+            }
+        })
+
+
         videoAdapter = VideoAdapter { url -> showVideo(url) }
         characterAdapter = CharacterAdapter()
         anime_id?.let { detailViewModel.setDetailAnime(it) }
@@ -123,6 +138,8 @@ class DetailFragment : Fragment() {
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
                 .into(backgroundImg)
 
+            _binding?.txtScore?.text  = it.score.toString()
+            _binding?.rank?.text = it.popularity.toString()
             animeTitle.text = it.title
             animeSummary.text = it.synopsis
             it.genres.let {
@@ -160,6 +177,7 @@ class DetailFragment : Fragment() {
         })
 
 
+
     }
 
     private fun updateCharacterDetails(list: List<CharactersListResponse>?) {
@@ -184,7 +202,7 @@ class DetailFragment : Fragment() {
         }
     }
 
-    fun handleExpandAction(view: View) {
+    private fun handleExpandAction(view: View) {
 
         if (binding.includedLayout.expandableLayout.isExpanded()) {
             binding.expandButton.text = getString(R.string.read_more)

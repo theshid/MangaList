@@ -49,6 +49,7 @@ dependencies {
     def paging_version = "3.0.0-alpha11"
     def room_version = "2.3.0-alpha02"
     def fragment_version = "1.3.2"
+    def lottieVersion = "3.7.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
@@ -120,9 +121,16 @@ dependencies {
 
     implementation 'com.asksira.android:loopingviewpager:1.3.1'
 
-    implementation 'com.airbnb.android:lottie:$lottieVersion'
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    debugImplementation 'com.facebook.flipper:flipper:0.84.0'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.1'
+
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.84.0'
 
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 
 
 
