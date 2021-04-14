@@ -28,4 +28,7 @@
     <string name="winter">Winter &#10052;</string>
     <string name="search">Search</string>
     <string name="title_bookmarks">Bookmarks</string>
+    <string name="view_all">View All</string>
+    <string name="view_cast">View Cast</string>
+    <string name="day_night">Day/Night</string>
 </resources>

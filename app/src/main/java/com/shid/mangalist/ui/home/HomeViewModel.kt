@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import com.shid.mangalist.data.local.entities.*
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.data.repository.IAnimeRepository
+import com.shid.mangalist.utils.SavePref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -20,9 +21,10 @@ import javax.inject.Inject
 @ExperimentalPagingApi
 @HiltViewModel
 class HomeViewModel @ExperimentalPagingApi
- @Inject constructor(
-    private val repository: IAnimeRepository
-): ViewModel() {
+@Inject constructor(
+    private val repository: IAnimeRepository,
+    private val savePref: SavePref
+) : ViewModel() {
 
     private var _animeAiring = MutableLiveData<List<AnimeListResponse>>()
     val animeAiring: LiveData<List<AnimeListResponse>>
@@ -65,5 +67,13 @@ class HomeViewModel @ExperimentalPagingApi
                 e.printStackTrace()
             }
         }
+    }
+
+    fun setDayNight(status: Boolean) {
+        savePref.setNightMode(state = status)
+    }
+
+    fun loadDayNight(): Boolean {
+        return savePref.loadNightMode()
     }
 }

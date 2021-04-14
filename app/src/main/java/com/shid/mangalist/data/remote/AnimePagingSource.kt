@@ -1,13 +1,16 @@
 package com.shid.mangalist.data.remote
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import com.shid.mangalist.data.remote.network.ApiServices
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.home.HomeFragment
 import javax.inject.Inject
 
+@ExperimentalPagingApi
 class AnimePagingSource @Inject constructor(val backend: ApiServices
 ) : PagingSource<Int, AnimeListResponse>() {
+
     override suspend fun load(
         params: LoadParams<Int>
     ): LoadResult<Int, AnimeListResponse> {

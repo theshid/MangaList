@@ -4,6 +4,12 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#081B33</item>
         <item name="colorPrimaryVariant">#081B33</item>
+        <item name="backgroundColor">#ffffff</item>
+        <item name="textColor">@color/black</item>
+        <item name="tintColor">@color/black</item>
+        <item name="tintSheet">@color/navy_blue</item>
+        <item name="buttonColor">@color/white</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

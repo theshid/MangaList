@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_detail"
+    android:background="?attr/backgroundColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.detail.DetailFragment">
@@ -267,7 +268,7 @@
                     android:paddingLeft="@dimen/padding"
                     android:paddingRight="@dimen/padding"
                     android:paddingBottom="@dimen/padding"
-                    android:text="@string/text_read_more"
+                    android:text="@string/view_cast"
                     android:textAllCaps="true"
                     android:textColor="@color/text_fragment_detail"
                     android:textSize="@dimen/font_small"

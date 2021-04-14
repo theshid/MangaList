@@ -5,13 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     app:cardCornerRadius="10dp"
     app:cardElevation="20dp"
     app:cardMaxElevation="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <ImageView
             android:id="@+id/img_pager"
@@ -28,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
-            android:textColor="@color/navy_blue"
+            android:textColor="?attr/textColor"
             android:fontFamily="@font/quicksand_semibold"
             android:text="Anime Title"
             android:textSize="13sp"

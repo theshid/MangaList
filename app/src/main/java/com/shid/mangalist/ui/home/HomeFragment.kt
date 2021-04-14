@@ -1,12 +1,12 @@
 package com.shid.mangalist.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
 
+@ExperimentalPagingApi
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        setHasOptionsMenu(true)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         configureViews(root)
         setBottomHomeFragment()
@@ -167,7 +168,18 @@ class HomeFragment : Fragment() {
 
     }
 
-
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.daydark_menu, menu)
+        val dayNightView = menu.findItem(R.id.day_dark).actionView
+        // Set the item state
+        lifecycleScope.launch {
+            val isChecked = homeViewModel.loadDayNight()
+            val item = menu.findItem(R.id.day_dark)
+            item.isChecked = isChecked
+            setUIMode(item, isChecked)
+        }
+    }
 
     companion object {
         lateinit var typeAnime: String
@@ -182,7 +194,7 @@ class HomeFragment : Fragment() {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED)
                     layoutParams.setMargins(0, 0, 0, 0); // remove top margin
                 else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    layoutParams.setMargins(0, 80, 0, 0); // add top margin
+                    layoutParams.setMargins(0, 0, 0, 0); // add top margin
 
                     bottomSheet.layoutParams = layoutParams;
                 }
@@ -304,6 +316,34 @@ class HomeFragment : Fragment() {
         }
 
 
+    }
+
+    @ExperimentalPagingApi
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.day_dark -> {
+                item.isChecked = !item.isChecked
+                setUIMode(item, item.isChecked)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    }
+
+    @ExperimentalPagingApi
+    private fun setUIMode(item: MenuItem, checked: Boolean) {
+        if (checked) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            homeViewModel.setDayNight(true)
+            item.setIcon(R.drawable.bulb_on)
+
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            homeViewModel.setDayNight(false)
+            item.setIcon(R.drawable.bulb_off)
+
+        }
     }
 
     override fun onResume() {

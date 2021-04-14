@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
-        setTransparentStatusBar(true)
+        setTransparentStatusBar(false)
         overlayLayout = findViewById(R.id.overlay_layout)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
