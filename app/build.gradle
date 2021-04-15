@@ -122,6 +122,8 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
 
+    implementation 'com.github.turkergoksu:PercentageView:1.0.5'
+
 
 
 

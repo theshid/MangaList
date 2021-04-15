@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.shid.mangalist.R
 import com.shid.mangalist.data.local.entities.BookmarkAnime
+import me.turkergoksu.lib.PercentageView
 
 class BookmarkAdapter(private val showDetail: (id: Int) -> Unit) :
     RecyclerView.Adapter<BookmarkAdapter.BookmarkViewHolder>() {
@@ -47,11 +48,19 @@ class BookmarkAdapter(private val showDetail: (id: Int) -> Unit) :
     inner class BookmarkViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val score: TextView = itemView.findViewById(R.id.score)
+        private val txt_score: TextView = itemView.findViewById(R.id.txt_score)
         private val title: TextView = itemView.findViewById(R.id.title)
+        private val rating: PercentageView = itemView.findViewById(R.id.percentageView)
         private val image: ImageView = itemView.findViewById(R.id.img_discover)
         fun bind(anime: BookmarkAnime) {
-            score.text = anime.score.toString()
+            anime.score?.let { rating.setPercentage((it * 10).toInt()) }
             title.text = anime.title
+            if (anime.score.toString() == "null"){
+                txt_score.visibility = View.VISIBLE
+                score.visibility = View.VISIBLE
+                score.text = "N/A"
+                rating.visibility = View.GONE
+            }
             image.load(anime.imageUrl)
 
             itemView.apply {

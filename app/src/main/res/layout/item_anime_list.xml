@@ -18,13 +18,41 @@
                 app:cardElevation="20dp"
                 app:cardMaxElevation="20dp">
 
-                <ImageView
-                    android:id="@+id/poster_image"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/poster"
-                    android:scaleType="centerCrop"
-                    tools:src="@color/purple_500" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/poster_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/poster"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@color/purple_500" />
+
+                    <me.turkergoksu.lib.PercentageView
+                        android:id="@+id/percentageView"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:fontFamily="@font/arkhip_font"
+                        app:animDuration="1500"
+                        app:centerColor="#f7efe2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:percentage="99"
+                        app:percentageWidth="10"
+                        app:progressBackgroundColor="@color/white"
+                        app:progressColor="#18801a"
+                        app:softness="true"
+                        app:textColor="#18801a"
+                        app:textSize="13sp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -35,11 +63,12 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/arkhip_font"
-                android:maxLines="1"
+                android:maxLines="2"
+                android:textSize="@dimen/font_medium"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 tools:text="@string/app_name" />
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -52,7 +81,9 @@
                     android:text="@string/score"
                     android:textSize="13sp" />
 
-                <TextView
+
+
+                &lt;!&ndash;<TextView
                     android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,9 +92,9 @@
                     android:paddingHorizontal="8dp"
                     android:textColor="@color/white"
                     android:textSize="13sp"
-                    tools:text="8.7" />
+                    tools:text="8.7" />&ndash;&gt;
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 

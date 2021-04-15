@@ -10,6 +10,7 @@ import coil.load
 import com.shid.mangalist.R
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
 import com.shid.mangalist.ui.home.HomeAdapter
+import me.turkergoksu.lib.PercentageView
 
 class DiscoverAdapter (private val showDetail: (id: Int) -> Unit) :
     RecyclerView.Adapter<DiscoverAdapter.DiscoverAnimeViewHolder>() {
@@ -43,14 +44,18 @@ class DiscoverAdapter (private val showDetail: (id: Int) -> Unit) :
 
     inner class DiscoverAnimeViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
+        private val txt_score: TextView = itemView.findViewById(R.id.txt_score)
         private val score: TextView = itemView.findViewById(R.id.score)
+        private val rating: PercentageView = itemView.findViewById(R.id.percentageView)
         private val title: TextView = itemView.findViewById(R.id.title)
         private val image: ImageView = itemView.findViewById(R.id.img_discover)
         fun bind(animeListResponse: AnimeListResponse) {
+            animeListResponse.score?.let { rating.setPercentage((it * 10).toInt()) }
             if (animeListResponse.score.toString() == "null"){
+                txt_score.visibility = View.VISIBLE
+                score.visibility = View.VISIBLE
                 score.text = "N/A"
-            } else{
-                score.text = animeListResponse.score.toString()
+                rating.visibility = View.GONE
             }
 
             title.text = animeListResponse.title

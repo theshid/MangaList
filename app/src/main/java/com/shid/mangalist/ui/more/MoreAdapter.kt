@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.shid.mangalist.R
 import com.shid.mangalist.data.remote.response.main_response.AnimeListResponse
+import me.turkergoksu.lib.PercentageView
 
 
 class MoreAdapter (private val activity2:Activity,private val showDetail: (id: Int) -> Unit) :
@@ -55,8 +56,10 @@ class MoreAdapter (private val activity2:Activity,private val showDetail: (id: I
     inner class MoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val image: ImageView = itemView.findViewById(R.id.image)
+        private val txt_score:TextView = itemView.findViewById(R.id.txt_score)
         private val title: TextView = itemView.findViewById(R.id.txt_title)
         private val score: TextView = itemView.findViewById(R.id.score_more)
+        private val rating: PercentageView = itemView.findViewById(R.id.percentageView)
 
 
         /*init {
@@ -70,10 +73,12 @@ class MoreAdapter (private val activity2:Activity,private val showDetail: (id: I
         fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
             title.text = anime.title
-            if (anime.score.toString() == "0.0" || anime.score.toString() == "null"){
+            anime.score?.let { rating.setPercentage((it * 10).toInt()) }
+            if ( anime.score.toString() == "null"){
+                txt_score.visibility = View.VISIBLE
+                score.visibility = View.VISIBLE
+                rating.visibility = View.GONE
                 score.text = "N/A"
-            } else{
-                score.text = anime.score.toString()
             }
 
             itemView.apply {
