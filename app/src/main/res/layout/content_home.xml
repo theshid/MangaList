@@ -229,7 +229,7 @@
             android:layout_marginBottom="12dp"
             android:layout_weight="1"
             android:fontFamily="@font/quicksand_semibold"
-            android:text="Top Movies"
+            android:text="Top 10 Movies"
             android:textColor="?attr/textColor"
             android:textSize="16sp" />
 
@@ -301,7 +301,7 @@
             android:layout_marginBottom="12dp"
             android:layout_weight="1"
             android:fontFamily="@font/quicksand_semibold"
-            android:text="Top Tv Shows"
+            android:text="Top 10 Best Rated Animes"
             android:textColor="?attr/textColor"
             android:textSize="16sp" />
 

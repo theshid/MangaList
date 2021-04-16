@@ -73,7 +73,8 @@
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/arkhip_font"
                     android:text="@string/top_airing"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="?attr/textColor"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -87,6 +88,7 @@
                     android:fontFamily="@font/arkhip_font"
                     android:text="@string/view_all"
                     android:textColor="@color/text_fragment_detail"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintBottom_toBottomOf="@+id/top_airing_text"
                     app:layout_constraintEnd_toEndOf="parent" />

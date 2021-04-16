@@ -4,7 +4,7 @@
     <string name="title_dashboard">Discover</string>
     <string name="title_notifications">Notifications</string>
     <string name="more">More</string>
-    <string name="top_airing">Top Airing</string>
+    <string name="top_airing">Top 10  Airing Animes</string>
     <string name="score">Score</string>
     <string name="poster">Poster</string>
     <string name="top_upcoming">Upcoming</string>
@@ -21,7 +21,7 @@
     <string name="read_more">Read More</string>
     <string name="read_less">Read Less</string>
     <string name="search_hint">Search...</string>
-    <string name="home_bottom_dialog_title">Upcoming Animes</string>
+    <string name="home_bottom_dialog_title">Top 10 Upcoming Animes</string>
     <string name="spring">Spring &#127793;</string>
     <string name="summer">Summer &#127774;</string>
     <string name="fall">Fall &#127810;</string>
