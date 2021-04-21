@@ -32,19 +32,14 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
-    lateinit var rootView: ScrollView
-    lateinit var trans_imageView: ImageView
+
     private val detailViewModel: DetailViewModel by viewModels()
-    private lateinit var rv_characters: RecyclerView
-    private lateinit var rv_video: RecyclerView
-    private lateinit var linearLayout: LinearLayout
+
     private lateinit var characterAdapter: CharacterAdapter
     private lateinit var videoAdapter: VideoAdapter
-    private lateinit var animeTitle: AppCompatTextView
-    private lateinit var animeSummary: AppCompatTextView
+
     private var anime_id: Int? = null
-    private var image_url: String? = null
-    private lateinit var backgroundImg: ImageView
+
     private var _binding: DetailFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -55,47 +50,28 @@ class DetailFragment : Fragment() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = DetailFragmentBinding.inflate(inflater, container, false)
-        val view1 = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
-        view1.fitsSystemWindows = false
-        view1.setPadding(0,0,0,0)
-
         val view: View = binding.root
-        rootView = view.findViewById(R.id.root_detail)
         setUi(view)
-
-
-        //trans_imageView.load(image_url)
-
-        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        bottomNav.visibility = View.GONE
-
-        /*(activity as MainActivity).actionBar?.setDisplayShowHomeEnabled(true)*/
         return view
     }
 
     private fun setUi(view: View) {
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.GONE
 
-        trans_imageView = view.findViewById(R.id.poster_image)
-        backgroundImg = view.findViewById(R.id.transformation_image)
-        rv_characters = view.findViewById(R.id.cast_list)
-        rv_video = view.findViewById(R.id.video_list)
-        animeTitle = view.findViewById(R.id.anime_title)
-        animeSummary = view.findViewById(R.id.txt_runtime)
-        linearLayout = view.findViewById(R.id.list_genres)
+        val view1 = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view1.fitsSystemWindows = false
+        view1.setPadding(0, 0, 0, 0)
+
         binding.expandButton.setOnClickListener(View.OnClickListener {
             handleExpandAction(view)
         })
-        binding.starButton.setOnLikeListener(object: OnLikeListener{
+        binding.starButton.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton?) {
                 detailViewModel.anime.value?.let { detailViewModel.setFavorite(it) }
                 Sneaker.with(requireActivity()) // Activity, Fragment or ViewGroup
@@ -117,33 +93,46 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // val poster = arguments?.getParcelable<AiringAnime>(posterKey)
-
         val animeId = DetailFragmentArgs.fromBundle(requireArguments()).anime
         detailViewModel.checkIfAnimeIsFavorite(animeId)
         detailViewModel.setDetailAnime(animeId)
+
+        checkIfAnimeIsInDb()
+        setAdapters()
+        fetchAnimeDetail()
+        fetchCast()
+        fetchVideos()
+
+    }
+
+    private fun setAdapters() {
+        videoAdapter = VideoAdapter { url -> showVideo(url) }
+        characterAdapter = CharacterAdapter()
+    }
+
+    private fun checkIfAnimeIsInDb() {
         detailViewModel.isAnimeInDb.observe(viewLifecycleOwner, Observer {
-            if (it == 1){
+            if (it == 1) {
                 binding.starButton.isLiked = true
             }
         })
+    }
 
-
-        videoAdapter = VideoAdapter { url -> showVideo(url) }
-        characterAdapter = CharacterAdapter()
+    private fun fetchAnimeDetail() {
         anime_id?.let { detailViewModel.setDetailAnime(it) }
-        detailViewModel.anime.observe(viewLifecycleOwner, Observer {
+        detailViewModel.anime.observe(viewLifecycleOwner, Observer { it ->
 
-            trans_imageView.load(it.imageUrl)
+            binding.posterImage.load(it.imageUrl)
             anime_id = it.id
-            Glide.with(backgroundImg.context).load(it.imageUrl)
+            Glide.with(binding.transformationImage.context).load(it.imageUrl)
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
-                .into(backgroundImg)
+                .into(binding.transformationImage)
 
-            _binding?.txtScore?.text  = it.score.toString()
+            _binding?.txtScore?.text = it.score.toString()
             _binding?.rank?.text = it.popularity.toString()
-            animeTitle.text = it.title
-            animeSummary.text = it.synopsis
+            binding.animeTitle.text = it.title
+            binding.txtRuntime.text = it.synopsis
+
             it.genres.let {
                 for (genre in it.indices) {
                     val params: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
@@ -157,36 +146,39 @@ class DetailFragment : Fragment() {
                         setTextColor(Color.parseColor("#FFFFFF"))
                         text = it[genre].name.toString()
                     }
-                    linearLayout.addView(genreTextView)
+                    binding.listGenres.addView(genreTextView)
+                    
                 }
             }
         })
 
+    }
+
+    private fun fetchCast() {
         detailViewModel.characters.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 updateCharacterDetails(it)
             }
         })
+    }
 
+    private fun fetchVideos() {
         detailViewModel.videos.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
-                rv_video.apply {
+                binding.videoList.apply {
                     setHasFixedSize(true)
                     adapter = videoAdapter
                 }
                 videoAdapter.setData(it)
             }
         })
-
-
-
     }
 
     private fun updateCharacterDetails(list: List<CharactersListResponse>?) {
         binding.includedLayout.castList.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includedLayout.castList.visibility = View.VISIBLE
-        val characterAdapter2: CharacterAdapter = CharacterAdapter()
+        val characterAdapter2 = CharacterAdapter()
         Log.d("Detail", "size of list:" + (list?.size ?: 0))
 
         binding.includedLayout.castList.adapter = characterAdapter2
@@ -206,7 +198,7 @@ class DetailFragment : Fragment() {
 
     private fun handleExpandAction(view: View) {
 
-        if (binding.includedLayout.expandableLayout.isExpanded()) {
+        if (binding.includedLayout.expandableLayout.isExpanded) {
             binding.expandButton.text = getString(R.string.read_more)
             binding.includedLayout.expandableLayout.collapse()
         } else {

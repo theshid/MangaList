@@ -16,9 +16,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
+import com.shid.mangalist.databinding.SearchFragmentBinding
 import com.shid.mangalist.ui.discover.DiscoverAdapter
 import com.shid.mangalist.ui.discover.DiscoverFragmentDirections
 import com.shid.mangalist.ui.discover.DiscoverViewModel
+import com.shid.mangalist.utils.custom.gone
+import com.shid.mangalist.utils.custom.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,9 +30,12 @@ class SearchFragment : Fragment() {
     @ExperimentalPagingApi
     private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var adapter: DiscoverAdapter
-    private lateinit var rvAnimeSearch: RecyclerView
+    //private lateinit var rvAnimeSearch: RecyclerView
     private lateinit var loading: View
-    private lateinit var lottie_search:LottieAnimationView
+    //private lateinit var lottie_search: LottieAnimationView
+
+    private var _binding: SearchFragmentBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         fun newInstance() = SearchFragment()
@@ -39,23 +45,28 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = SearchFragmentBinding.inflate(inflater, container, false)
+        val rootView = binding.root
         setHasOptionsMenu(true)
-        val root = inflater.inflate(R.layout.search_fragment, container, false)
-        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
-        view.fitsSystemWindows = false
-        view.setPadding(0,0,0,0)
-        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        bottomNav.visibility = View.GONE
-        loading = root.findViewById(R.id.loading)
-        lottie_search = root.findViewById(R.id.lottie_search)
-        rvAnimeSearch = root.findViewById(R.id.searchRecycler)
+        setUI()
+        loading = rootView.findViewById(R.id.loading)
+        return rootView
+    }
+
+    private fun setUI() {
         adapter = DiscoverAdapter { id -> showDetail(id) }
-        rvAnimeSearch.adapter = adapter
-        with(rvAnimeSearch) {
+        _binding?.searchRecycler?.adapter = adapter
+        with(binding.searchRecycler) {
             setHasFixedSize(true)
             adapter = adapter
         }
-        return root
+
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.GONE
+
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0, 0, 0, 0)
     }
 
     @ExperimentalPagingApi
@@ -67,8 +78,11 @@ class SearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             @SuppressLint("SetTextI18n")
             override fun onQueryTextSubmit(query: String?): Boolean {
+                binding.apply {
+                    lottieSearch.gone()
+                }
                 loading.visibility = View.VISIBLE
-                lottie_search.visibility = View.GONE
+                //lottie_search.visibility = View.GONE
 
                 if (query != null) {
                     searchViewModel.setResult(query)
@@ -77,10 +91,13 @@ class SearchFragment : Fragment() {
                             adapter.setData(anime)
                             loading.visibility = View.GONE
                         } else {
-                            lottie_search.visibility = View.VISIBLE
-                            Toast.makeText(requireContext(), "Oops, no anime found! Try to type another name", Toast.LENGTH_SHORT).show()
-                            /*binding.textOnSearch.text =
-                                "Ups, no anime found! Try to type another name :)"*/
+                            binding.lottieSearch.visible()
+                            //lottie_search.visibility = View.VISIBLE
+                            Toast.makeText(
+                                requireContext(),
+                                "Oops, no anime found! Try to type another name",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     })
                 }
@@ -99,7 +116,6 @@ class SearchFragment : Fragment() {
         this.findNavController()
             .navigate(SearchFragmentDirections.actionSearchFragmentToDetailAnimeFragment(id))
     }
-
 
 
 }
