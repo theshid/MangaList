@@ -59,7 +59,7 @@ class MoreAdapter (private val activity2:Activity,private val showDetail: (id: I
         private val txt_score:TextView = itemView.findViewById(R.id.txt_score)
         private val title: TextView = itemView.findViewById(R.id.txt_title)
         private val score: TextView = itemView.findViewById(R.id.score_more)
-        private val rating: PercentageView = itemView.findViewById(R.id.percentageView)
+       // private val rating: PercentageView = itemView.findViewById(R.id.percentageView)
 
 
         /*init {
@@ -73,11 +73,8 @@ class MoreAdapter (private val activity2:Activity,private val showDetail: (id: I
         fun bindTo(anime: AnimeListResponse) {
             image.load(anime.imageUrl)
             title.text = anime.title
-            anime.score?.let { rating.setPercentage((it * 10).toInt()) }
+            anime.score?.let { score.text = it.toString() }
             if ( anime.score.toString() == "null"){
-                txt_score.visibility = View.VISIBLE
-                score.visibility = View.VISIBLE
-                rating.visibility = View.GONE
                 score.text = "N/A"
             }
 

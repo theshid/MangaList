@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -34,7 +35,9 @@ class BookmarksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBookmarkBinding.inflate(inflater, container, false)
-
+        val view1 = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view1.fitsSystemWindows = false
+        view1.setPadding(0,0,0,0)
         val view: View = binding.root
         // val root = inflater.inflate(R.layout.fragment_bookmark, container, false)
         initViews()

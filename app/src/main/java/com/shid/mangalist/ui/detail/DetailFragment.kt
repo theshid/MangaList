@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -64,7 +65,9 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = DetailFragmentBinding.inflate(inflater, container, false)
-
+        val view1 = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view1.fitsSystemWindows = false
+        view1.setPadding(0,0,0,0)
 
         val view: View = binding.root
         rootView = view.findViewById(R.id.root_detail)

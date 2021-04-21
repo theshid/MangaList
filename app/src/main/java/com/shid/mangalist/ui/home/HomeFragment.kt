@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -84,6 +85,9 @@ class HomeFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = true
+        view.setPadding(0,0,0,0)
         configureViews(root)
         setBottomHomeFragment()
         setVisibility()

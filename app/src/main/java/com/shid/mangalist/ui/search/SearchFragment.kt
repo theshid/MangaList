@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.ui.discover.DiscoverAdapter
 import com.shid.mangalist.ui.discover.DiscoverFragmentDirections
@@ -38,6 +41,11 @@ class SearchFragment : Fragment() {
     ): View? {
         setHasOptionsMenu(true)
         val root = inflater.inflate(R.layout.search_fragment, container, false)
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0,0,0,0)
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.GONE
         loading = root.findViewById(R.id.loading)
         lottie_search = root.findViewById(R.id.lottie_search)
         rvAnimeSearch = root.findViewById(R.id.searchRecycler)

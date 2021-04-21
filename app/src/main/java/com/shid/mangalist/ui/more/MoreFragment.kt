@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -39,6 +40,9 @@ class MoreFragment : BaseFragment() {
         val typeFromActivity = MoreFragmentArgs.fromBundle(requireArguments()).type.type
         setView(root, typeFromActivity)
         val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0,0,0,0)
         bottomNav.visibility = View.GONE
         return root
     }

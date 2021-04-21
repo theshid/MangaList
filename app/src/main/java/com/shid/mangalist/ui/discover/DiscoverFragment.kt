@@ -3,6 +3,7 @@ package com.shid.mangalist.ui.discover
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +36,9 @@ class DiscoverFragment : BaseFragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.fragment_discovery, container, false)
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0,0,0,0)
         initViews(root)
         setHasOptionsMenu(true)
 
