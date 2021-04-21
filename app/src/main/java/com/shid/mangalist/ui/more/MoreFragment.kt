@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
+import com.shid.mangalist.databinding.MoreFragment2Binding
 import com.shid.mangalist.utils.custom.BaseFragment
+import com.shid.mangalist.utils.custom.gone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import www.sanju.zoomrecyclerlayout.ZoomRecyclerLayout
@@ -24,6 +26,9 @@ class MoreFragment : BaseFragment() {
     private val moreViewModel: MoreViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MoreAdapter
+
+    private var _binding:MoreFragment2Binding?=null
+    private val binding get() = _binding!!
 
 
     companion object {
@@ -35,37 +40,56 @@ class MoreFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.more_fragment2, container, false)
+    ): View {
+        _binding = MoreFragment2Binding.inflate(inflater,container,false)
+        val rootView = binding.root
         val typeFromActivity = MoreFragmentArgs.fromBundle(requireArguments()).type.type
-        setView(root, typeFromActivity)
-        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
-        view.fitsSystemWindows = false
-        view.setPadding(0,0,0,0)
-        bottomNav.visibility = View.GONE
-        return root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        /*val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            goToHome()
-        }
-        callback.isEnabled*/
-
+        setView(typeFromActivity)
+        return rootView
     }
 
 
     @ExperimentalPagingApi
-    private fun setView(root: View, type: String) {
+    private fun setView(type: String) {
         moreViewModel.setType(type)
-        recyclerView = root.findViewById(R.id.rv_top)
-        adapter = MoreAdapter(activity) { id -> showDetail(id) }
-        recyclerView.adapter = adapter
+        setRecyclerView()
+        setBottomNav()
+        fixActionBar()
+    }
+
+    private fun setBottomNav() {
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.gone()
+
+    }
+
+    private fun fixActionBar() {
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0,0,0,0)
+    }
+
+    private fun setRecyclerView() {
+        setAdapter()
         val linearLayoutManager = ZoomRecyclerLayout(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        loadDataInRecyclerView()
+        binding.rvTop.apply {
+            layoutManager = linearLayoutManager
+            setHasFixedSize(true)
+
+        }
+
+        setSnapHelper()
+    }
+
+    private fun setAdapter() {
+        adapter = MoreAdapter(activity) { id -> showDetail(id) }
+        binding.rvTop.adapter = adapter
+    }
+
+
+    private fun loadDataInRecyclerView() {
         lifecycleScope.launch {
             moreViewModel.animeAiring.observe(viewLifecycleOwner, { anime ->
                 if (anime != null) {
@@ -73,30 +97,16 @@ class MoreFragment : BaseFragment() {
                 }
             })
         }
-        recyclerView.apply {
-            layoutManager = linearLayoutManager
-            setHasFixedSize(true)
+    }
 
-        }
+    private fun setSnapHelper() {
+        val snapHelper = com.shid.mangalist.utils.custom.PagerSnapHelper { position ->
 
-        var snapHelper = com.shid.mangalist.utils.custom.PagerSnapHelper { position ->
-
-            var anime = adapter.getAnimeItem(position)
+            val anime = adapter.getAnimeItem(position)
             (activity as MainActivity).updateBackground(anime.imageUrl)
         }
 
-        snapHelper.attachToRecyclerView(recyclerView)
-
-
-
-
-
-    }
-
-    fun goToHome() {
-        findNavController().navigate(
-            MoreFragmentDirections.actionMoreFragmentToHomeFragment()
-        )
+        snapHelper.attachToRecyclerView(binding.rvTop)
     }
 
     private fun showDetail(id: Int) {

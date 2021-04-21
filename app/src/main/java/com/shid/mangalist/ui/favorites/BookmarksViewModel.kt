@@ -16,8 +16,7 @@ import javax.inject.Inject
 
 @ExperimentalPagingApi
 @HiltViewModel
-class BookmarksViewModel @Inject constructor(private val repository: IAnimeRepository,
-private val database: AnimeDatabase) : ViewModel() {
+class BookmarksViewModel @Inject constructor(private val database: AnimeDatabase) : ViewModel() {
     private var _list = MutableLiveData<List<BookmarkAnime>>()
     val bookmarkList: LiveData<List<BookmarkAnime>>
         get() = _list

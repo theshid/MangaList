@@ -11,17 +11,17 @@
 
     <com.shid.mangalist.utils.custom.CircleImageView
         android:id="@+id/image_cast"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/name_cast"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:padding="5dp"
+        android:padding="15dp"
         android:ellipsize="end"
         android:fontFamily="@font/arkhip_font"
         android:maxEms="6"

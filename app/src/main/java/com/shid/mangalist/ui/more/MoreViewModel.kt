@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoreViewModel @ExperimentalPagingApi
-@Inject constructor(private val repository: IAnimeRepository, private val apiServices: ApiServices) : ViewModel() {
+@Inject constructor(private val repository: IAnimeRepository) : ViewModel() {
 
     private var _animeAiring = MutableLiveData<List<AnimeListResponse>>()
     val animeAiring: LiveData<List<AnimeListResponse>>

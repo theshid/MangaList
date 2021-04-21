@@ -31,6 +31,7 @@ class HomeAdapter(private val showDetail: (id: Int) -> Unit) :
     ): HomeAdapter.AnimeViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_anime_list, parent, false)
+
         return AnimeViewHolder(view)
     }
 
@@ -48,17 +49,12 @@ class HomeAdapter(private val showDetail: (id: Int) -> Unit) :
 
     inner class AnimeViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        //private val score: TextView = itemView.findViewById(R.id.score)
         private val title: TextView = itemView.findViewById(R.id.title)
         private val image: ImageView = itemView.findViewById(R.id.poster_image)
         private val rating:PercentageView = itemView.findViewById(R.id.percentageView)
+
         fun bind(animeListResponse: AnimeListResponse) {
             animeListResponse.score?.let { rating.setPercentage((it * 10).toInt()) }
-            /*if(animeListResponse.score.toString() == "0.0"){
-                score.text= "N/A"
-            } else{
-                score.text = animeListResponse.score.toString()
-            }*/
 
             title.text = animeListResponse.title
             image.load(animeListResponse.imageUrl)

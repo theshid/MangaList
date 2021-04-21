@@ -30,10 +30,7 @@ class SearchFragment : Fragment() {
     @ExperimentalPagingApi
     private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var adapter: DiscoverAdapter
-    //private lateinit var rvAnimeSearch: RecyclerView
     private lateinit var loading: View
-    //private lateinit var lottie_search: LottieAnimationView
-
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -44,7 +41,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
         val rootView = binding.root
         setHasOptionsMenu(true)
@@ -54,20 +51,31 @@ class SearchFragment : Fragment() {
     }
 
     private fun setUI() {
+        setRecyclerView()
+        setBottomNav()
+        fixActionBar()
+    }
+
+    private fun setRecyclerView() {
         adapter = DiscoverAdapter { id -> showDetail(id) }
         _binding?.searchRecycler?.adapter = adapter
         with(binding.searchRecycler) {
             setHasFixedSize(true)
             adapter = adapter
         }
+    }
 
-        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        bottomNav.visibility = View.GONE
-
+    private fun fixActionBar() {
         val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
         view.fitsSystemWindows = false
         view.setPadding(0, 0, 0, 0)
     }
+
+    private fun setBottomNav() {
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.gone()
+    }
+
 
     @ExperimentalPagingApi
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -81,7 +89,7 @@ class SearchFragment : Fragment() {
                 binding.apply {
                     lottieSearch.gone()
                 }
-                loading.visibility = View.VISIBLE
+                loading.visible()
                 //lottie_search.visibility = View.GONE
 
                 if (query != null) {
@@ -89,7 +97,7 @@ class SearchFragment : Fragment() {
                     searchViewModel.animeResult.observe(viewLifecycleOwner, { anime ->
                         if (anime.isNotEmpty()) {
                             adapter.setData(anime)
-                            loading.visibility = View.GONE
+                            loading.gone()
                         } else {
                             binding.lottieSearch.visible()
                             //lottie_search.visibility = View.VISIBLE

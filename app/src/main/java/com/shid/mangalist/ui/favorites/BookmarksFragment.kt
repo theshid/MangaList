@@ -15,9 +15,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
 import com.shid.mangalist.databinding.FragmentBookmarkBinding
-import com.shid.mangalist.ui.discover.DiscoverFragmentDirections
+import com.shid.mangalist.utils.custom.visible
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalPagingApi
 @AndroidEntryPoint
 class BookmarksFragment : Fragment() {
 
@@ -33,22 +34,43 @@ class BookmarksFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBookmarkBinding.inflate(inflater, container, false)
-        val view1 = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
-        view1.fitsSystemWindows = false
-        view1.setPadding(0,0,0,0)
         val view: View = binding.root
-        // val root = inflater.inflate(R.layout.fragment_bookmark, container, false)
         initViews()
         setHasOptionsMenu(true)
         return view
     }
 
-    @ExperimentalPagingApi
+
     private fun initViews() {
+        setActionBar()
+        setBottomNav()
+        setAdapter()
+        fetchBookmarksAnimes()
+    }
+
+    private fun setBottomNav(){
         val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        bottomNav.visibility = View.VISIBLE
+        bottomNav.visible()
+    }
+
+    private fun setActionBar(){
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0,0,0,0)
+    }
+
+    private fun fetchBookmarksAnimes(){
+        bookmarkViewModel.getAllBookmarks()
+        bookmarkViewModel.bookmarkList.observe(viewLifecycleOwner, Observer {
+            if (it.isNotEmpty()){
+                adapter.setData(it)
+            }
+        })
+    }
+
+    private fun setAdapter(){
         adapter = BookmarkAdapter { id -> showDetail(id) }
         _binding?.rvBookmark?.adapter = adapter
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -71,14 +93,6 @@ class BookmarksFragment : Fragment() {
                 _binding?.lottieEmpty!!.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
             }
         })
-
-        bookmarkViewModel.getAllBookmarks()
-        bookmarkViewModel.bookmarkList.observe(viewLifecycleOwner, Observer {
-              if (it.isNotEmpty()){
-                  adapter.setData(it)
-              }
-        })
-
     }
 
     private fun showDetail(id: Int) {

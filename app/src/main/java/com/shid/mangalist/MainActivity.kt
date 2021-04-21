@@ -1,7 +1,6 @@
 package com.shid.mangalist
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,29 +12,30 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.utils.custom.BackgroundSwitcherView
-import com.shid.mangalist.utils.custom.setTransparentStatusBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var overlayLayout: BackgroundSwitcherView
+    private lateinit var overlayLayout: BackgroundSwitcherView
     private lateinit var toolbar:MaterialToolbar
     private val viewModel:MainViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setUI()
+        setUIMode( viewModel.loadDayNight())
+    }
+
+    private fun setUI() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
-        //setTransparentStatusBar(true)
         overlayLayout = findViewById(R.id.overlay_layout)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        setUIMode( viewModel.loadDayNight())
-        //val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
@@ -43,10 +43,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 
     private fun setUIMode(checked: Boolean) {

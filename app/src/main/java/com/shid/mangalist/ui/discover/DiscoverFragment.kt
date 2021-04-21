@@ -13,41 +13,65 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shid.mangalist.MainActivity
 import com.shid.mangalist.R
+import com.shid.mangalist.databinding.FragmentDiscoveryBinding
 import com.shid.mangalist.utils.custom.BaseFragment
+import com.shid.mangalist.utils.custom.gone
+import com.shid.mangalist.utils.custom.visible
 import com.shid.mangalist.utils.enum.Season
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.properties.Delegates
 
+@ExperimentalPagingApi
 @AndroidEntryPoint
 class DiscoverFragment : BaseFragment() {
 
-    @ExperimentalPagingApi
     private val discoverViewModel: DiscoverViewModel by viewModels()
     private lateinit var adapter: DiscoverAdapter
     private var thisYear = 0
     private lateinit var loading: View
-    private lateinit var rvAnimeSeason: RecyclerView
+
+    private var _binding: FragmentDiscoveryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val root = inflater.inflate(R.layout.fragment_discovery, container, false)
-        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
-        view.fitsSystemWindows = false
-        view.setPadding(0,0,0,0)
-        initViews(root)
+        _binding = FragmentDiscoveryBinding.inflate(inflater, container, false)
+        val rootView = binding.root
+        initViews(rootView)
         setHasOptionsMenu(true)
 
-        return root
+        return rootView
+    }
+
+    private fun initViews(view: View) {
+        setBottomNav()
+        fixActionActionBar()
+        loading = view.findViewById(R.id.loading)
+        setAdapter()
+    }
+
+    private fun setAdapter() {
+        adapter = DiscoverAdapter { id -> showDetail(id) }
+        binding.rvAnimeSeason.adapter = adapter
+    }
+
+    private fun fixActionActionBar() {
+        val view = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.container)
+        view.fitsSystemWindows = false
+        view.setPadding(0, 0, 0, 0)
+    }
+
+    private fun setBottomNav() {
+        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
+        bottomNav.visibility = View.VISIBLE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         thisYear = Calendar.getInstance()[Calendar.YEAR]
     }
 
@@ -56,20 +80,26 @@ class DiscoverFragment : BaseFragment() {
             .navigate(DiscoverFragmentDirections.actionNavigationDiscoverToDetailAnimeFragment(id))
     }
 
-    @ExperimentalPagingApi
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.season_menu, menu)
-        loading.visibility = View.VISIBLE
-        discoverViewModel.setSeason(thisYear, Season.SPRING.value.toLowerCase())
+        loading.visible()
         setTitleSeason(Season.SPRING)
+        setData()
+
+    }
+
+    private fun setData() {
+        discoverViewModel.setSeason(thisYear, Season.SPRING.value.toLowerCase(Locale.ROOT))
+
         discoverViewModel.animeSeason.observe(viewLifecycleOwner, { anime ->
             if (anime.isNotEmpty()) {
                 adapter.setData(anime)
-                loading.visibility = View.GONE
+                loading.gone()
             }
         })
-        with(rvAnimeSeason) {
+        with(binding.rvAnimeSeason) {
             setHasFixedSize(true)
             adapter = adapter
         }
@@ -87,9 +117,9 @@ class DiscoverFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    @ExperimentalPagingApi
+
     private fun refreshList(season: Season) {
-        discoverViewModel.setSeason(thisYear, season.value.toLowerCase())
+        discoverViewModel.setSeason(thisYear, season.value.toLowerCase(Locale.ROOT))
         setTitleSeason(season)
         discoverViewModel.animeSeason.observe(viewLifecycleOwner, { anime ->
             if (anime.isNotEmpty()) {
@@ -124,12 +154,5 @@ class DiscoverFragment : BaseFragment() {
         }
     }
 
-    private fun initViews(view: View) {
-        val bottomNav = (activity as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        bottomNav.visibility = View.VISIBLE
-        loading = view.findViewById(R.id.loading)
-        rvAnimeSeason = view.findViewById(R.id.rv_anime_season)
-        adapter = DiscoverAdapter { id -> showDetail(id) }
-        rvAnimeSeason.adapter = adapter
-    }
+
 }
