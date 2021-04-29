@@ -29,6 +29,13 @@
     <dimen name="margin_xxxxxlarge">40dip</dimen>
     <dimen name="margin_xxxxxxlarge">50dip</dimen>
 
+    <dimen name="marginPage">28dp</dimen>
+
+    <dimen name="marginClose">4dp</dimen>
+    <dimen name="marginSmall">8dp</dimen>
+    <dimen name="marginNormal">12dp</dimen>
+    <dimen name="marginFar">56dp</dimen>
+
     <dimen name="font_xxxxsmall">6sp</dimen>
     <dimen name="font_xxxsmall">8sp</dimen>
     <dimen name="font_xxsmall">10sp</dimen>

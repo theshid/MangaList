@@ -79,11 +79,243 @@
 
 
             <View
+                android:id="@+id/line_below_crew"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginTop="@dimen/margin"
                 android:background="@color/detail_list_item_view"
                 app:layout_constraintTop_toBottomOf="@+id/line_above_crew_title" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/line_below_crew">
+                <com.google.android.material.textview.MaterialTextView
+                    android:fontFamily="@font/arkhip_font"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/font_small_medium"
+                    android:layout_marginTop="@dimen/marginNormal"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:text="@string/info" />
+
+                <View
+                    android:id="@+id/linetitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:background="@color/detail_list_item_view"
+                    />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Title" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_title"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Type" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_type"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:text="Episodes" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_episodes"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/mediaSynonymsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top"
+                    >
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:layout_weight="1"
+                        android:text="Status" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_status"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:text="Popularity" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_popularity"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:text="Members" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_members"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/marginPage"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:layout_weight="1"
+                        android:text="Premiered" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_premier"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/marginPage"
+                    android:layout_marginBottom="@dimen/marginNormal"
+                    android:gravity="top">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:fontFamily="@font/arkhip_font"
+                        android:layout_width="0dp"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/marginNormal"
+                        android:layout_weight="1"
+                        android:text="Aired" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/info_anime_aired"
+                        android:fontFamily="@font/quicksand_regular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textColor="@color/detail_list_item_text" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

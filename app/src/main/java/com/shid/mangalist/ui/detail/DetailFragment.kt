@@ -130,6 +130,14 @@ class DetailFragment : Fragment() {
             _binding?.rank?.text = it.popularity.toString()
             binding.animeTitle.text = it.title
             binding.txtRuntime.text = it.synopsis
+            binding.includedLayout.infoAnimeAired.text = it.aired.from +" "+ "to" + " " + it.aired.to
+            binding.includedLayout.infoAnimeEpisodes.text = it.episodes.toString()
+            binding.includedLayout.infoAnimeMembers.text = it.members.toString()
+            binding.includedLayout.infoAnimeTitle.text = it.title
+            binding.includedLayout.infoAnimePremier.text = it.premiered
+            binding.includedLayout.infoAnimeStatus.text = it.status
+            binding.includedLayout.infoAnimePopularity.text = it.popularity.toString()
+            binding.includedLayout.infoAnimeType.text = it.type
 
             it.genres.let {
                 for (genre in it.indices) {
