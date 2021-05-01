@@ -9,6 +9,10 @@ App to display the use of dependency injection using Hilt, using Jikan wrapper t
 | ----------- | ----------- |----------- |----------- |
 |<img src="images/1.jpeg" width="150" height="250">|<img src="images/2.jpeg" width="150" height="250">|<img src="images/3.jpeg" width="150" height="250">|<img src="images/4.jpeg" width="150" height="250">|
 
+
+##TODO
+-Optimize home screen for all devices
+
 ## About
 
 - Shows most popular animes with their ratings
