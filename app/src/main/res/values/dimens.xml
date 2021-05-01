@@ -63,5 +63,8 @@
     <dimen name="item_list_height">210dp</dimen>
     <dimen name="item_list_width">150dp</dimen>
 
+    <dimen name="item_list_height_320">350dp</dimen>
+    <dimen name="item_list_width_320">210dp</dimen>
+
 
 </resources>

@@ -126,12 +126,21 @@ class DetailFragment : Fragment() {
                 .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
                 .into(binding.transformationImage)
 
-            _binding?.txtScore?.text = it.score.toString()
+            if (it.score.toString() == "null") {
+                _binding?.txtScore?.text = "N/A"
+            } else {
+                _binding?.txtScore?.text = it.score.toString()
+            }
+
             _binding?.rank?.text = it.popularity.toString()
             binding.animeTitle.text = it.title
             binding.txtRuntime.text = it.synopsis
-            binding.includedLayout.infoAnimeAired.text = it.aired.from +" "+ "to" + " " + it.aired.to
-            binding.includedLayout.infoAnimeEpisodes.text = it.episodes.toString()
+            if (it.episodes.toString() == "null") {
+                binding.includedLayout.infoAnimeEpisodes.text = "N/A"
+            } else {
+                binding.includedLayout.infoAnimeEpisodes.text = it.episodes.toString()
+            }
+
             binding.includedLayout.infoAnimeMembers.text = it.members.toString()
             binding.includedLayout.infoAnimeTitle.text = it.title
             binding.includedLayout.infoAnimePremier.text = it.premiered
@@ -153,7 +162,7 @@ class DetailFragment : Fragment() {
                         text = it[genre].name.toString()
                     }
                     binding.listGenres.addView(genreTextView)
-                    
+
                 }
             }
         })

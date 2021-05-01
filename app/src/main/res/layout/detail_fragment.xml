@@ -249,6 +249,7 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/margin"
+                    android:paddingRight="@dimen/margin_large"
                     android:text="Rumtime"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_small"

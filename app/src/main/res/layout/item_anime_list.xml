@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/item_list_width"
+    android:layout_width="150dp"
     android:foreground="?attr/selectableItemBackground"
     android:layout_height="wrap_content"
     android:layout_marginEnd="10dp"
@@ -13,7 +13,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/item_list_height"
+                android:layout_height="210dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="20dp"
                 app:cardMaxElevation="20dp">
